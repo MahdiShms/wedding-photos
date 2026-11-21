@@ -2,145 +2,227 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>صور الزفاف | Wedding Photos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>معرض صور الزفاف | Wedding Photos</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f8f6f2;
+      --bg: #f6f4f0;
       --surface: #ffffff;
-      --text: #1c1917;
-      --muted: #6b655f;
-      --accent: #1c1917;
+      --surface-2: #f1eee8;
+      --text: #181615;
+      --muted: #66615b;
+      --accent: #181615;
+      --accent-hover: #2e2a27;
       --accent-text: #ffffff;
-      --border: #e7e2da;
-      --shadow: 0 6px 24px rgba(28, 25, 23, 0.06);
-      --card-min: 230px;
-      --img-h: 240px;
+      --border: #e5e0d8;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --shadow: 0 8px 28px rgba(24, 22, 21, 0.05);
+      --card-min: 220px;
+      --img-h: 230px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       margin: 0;
-      font-family: "Cairo", "Plus Jakarta Sans", system-ui, sans-serif;
+      font-family: "Cairo", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.5;
+      overflow-x: hidden;
     }
 
     html[lang="en"] body {
-      font-family: "Plus Jakarta Sans", "Cairo", system-ui, sans-serif;
+      font-family: "Plus Jakarta Sans", "Cairo", system-ui, -apple-system, sans-serif;
     }
 
-    .container {
-      max-width: 1200px;
+    .app-shell {
+      max-width: 1240px;
       margin: 0 auto;
-      padding: 24px 18px 60px;
+      padding: 16px 14px calc(88px + env(safe-area-inset-bottom));
     }
 
+    /* Sticky Glass Header */
     header.topbar {
-      display: flex;
-      flex-wrap: wrap;
+      position: sticky;
+      top: 10px;
+      z-index: 40;
+      display: grid;
+      grid-template-columns: 1fr auto;
       align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      background: var(--surface);
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 18px 22px;
+      border-radius: var(--radius-lg);
+      padding: 14px 18px;
       box-shadow: var(--shadow);
+    }
+
+    .brand {
+      min-width: 0;
     }
 
     .brand h1 {
       margin: 0;
-      font-size: 1.45rem;
+      font-size: clamp(1.15rem, 2.4vw, 1.5rem);
       font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .brand p {
-      margin: 4px 0 0;
-      font-size: 0.92rem;
+      margin: 2px 0 0;
+      font-size: 0.85rem;
       color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .top-actions {
+    /* Fixed slot layout prevents jumping when switching RTL/LTR */
+    .header-slots {
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .slot-search {
+      min-width: 138px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .slot-lang {
+      width: 84px;
+      display: flex;
+      justify-content: center;
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      padding: 10px 16px;
+      gap: 7px;
+      height: 42px;
+      padding: 0 16px;
       border-radius: 999px;
       border: 1px solid var(--border);
       background: var(--surface);
       color: var(--text);
       font-family: inherit;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.16s ease;
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
       text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn:active:not(:disabled) {
+      transform: scale(0.98);
     }
 
     .btn:hover:not(:disabled) {
-      border-color: var(--accent);
-      background: #f3efe8;
+      background: var(--surface-2);
+      border-color: #cfc8bd;
     }
 
     .btn-primary {
       background: var(--accent);
       color: var(--accent-text);
       border-color: var(--accent);
+      width: 100%;
     }
 
     .btn-primary:hover:not(:disabled) {
-      background: #332e2a;
-      border-color: #332e2a;
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+
+    .lang-btn {
+      width: 100%;
+      padding: 0 10px;
+      font-size: 0.84rem;
     }
 
     .btn:disabled {
-      opacity: 0.55;
+      opacity: 0.5;
       cursor: not-allowed;
     }
 
+    /* Fixed-geometry toolbar so state changes never shift controls */
     .toolbar {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: 1fr auto;
       align-items: center;
-      justify-content: space-between;
       gap: 12px;
-      margin-top: 20px;
-      padding: 12px 16px;
+      margin-top: 14px;
+      padding: 10px 14px;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: var(--radius-md);
+      min-height: 58px;
     }
 
-    .filter-info {
+    .toolbar-left {
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
       gap: 10px;
-      font-size: 0.92rem;
-      color: var(--muted);
+      min-width: 0;
+    }
+
+    .badge-text {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Reserved container prevents layout jump when Show All / Download All appear */
+    .result-actions-slot {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 36px;
+    }
+
+    .result-actions-slot.hidden-slot {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .pill-btn {
+      height: 36px;
+      padding: 0 14px;
+      font-size: 0.84rem;
     }
 
     .size-group {
-      display: inline-flex;
-      background: var(--bg);
-      padding: 4px;
+      display: inline-grid;
+      grid-template-columns: repeat(3, 64px);
+      background: var(--surface-2);
+      padding: 3px;
       border-radius: 999px;
       border: 1px solid var(--border);
-      gap: 4px;
+      flex-shrink: 0;
     }
 
     .size-btn {
@@ -148,11 +230,12 @@
       background: transparent;
       color: var(--muted);
       font-family: inherit;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 600;
-      padding: 6px 12px;
+      height: 30px;
       border-radius: 999px;
       cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease;
     }
 
     .size-btn.active {
@@ -160,33 +243,51 @@
       color: var(--accent-text);
     }
 
-    .status-bar {
-      margin-top: 12px;
-      font-size: 0.88rem;
+    .status-line {
+      margin-top: 10px;
+      padding-inline: 6px;
+      font-size: 0.86rem;
       color: var(--muted);
-      padding-inline: 4px;
+      min-height: 22px;
     }
 
-    /* Grid sizes: small, medium, large */
-    body.size-small { --card-min: 155px; --img-h: 165px; }
-    body.size-medium { --card-min: 235px; --img-h: 240px; }
-    body.size-large { --card-min: 330px; --img-h: 330px; }
+    /* Display Size Presets */
+    body.size-small {
+      --card-min: 150px;
+      --img-h: 155px;
+    }
+
+    body.size-medium {
+      --card-min: 220px;
+      --img-h: 230px;
+    }
+
+    body.size-large {
+      --card-min: 320px;
+      --img-h: 320px;
+    }
 
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(var(--card-min), 1fr));
-      gap: 16px;
-      margin-top: 16px;
+      gap: 14px;
+      margin-top: 12px;
     }
 
     .card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: var(--radius-md);
       overflow: hidden;
       box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
+      transition: transform 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(24, 22, 21, 0.08);
     }
 
     .card img {
@@ -194,7 +295,7 @@
       height: var(--img-h);
       object-fit: cover;
       display: block;
-      background: #efece6;
+      background: var(--surface-2);
     }
 
     .card-body {
@@ -207,7 +308,7 @@
     }
 
     .card-name {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--muted);
       white-space: nowrap;
       overflow: hidden;
@@ -215,45 +316,69 @@
     }
 
     .card-actions {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr auto;
       gap: 8px;
     }
 
-    .card-link {
-      flex: 1;
-      text-align: center;
-      padding: 8px 10px;
-      border-radius: 9px;
-      background: #f3efe8;
-      color: var(--text);
+    .card-dl {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 36px;
+      padding: 0 12px;
+      border-radius: var(--radius-sm);
+      background: var(--accent);
+      color: var(--accent-text);
       text-decoration: none;
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       font-weight: 600;
     }
 
-    .card-link:hover {
-      background: #e7e1d6;
+    .card-dl:hover {
+      background: var(--accent-hover);
+    }
+
+    .card-view {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 36px;
+      padding: 0 10px;
+      border-radius: var(--radius-sm);
+      background: var(--surface-2);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
     }
 
     .empty-state {
       text-align: center;
-      padding: 48px 20px;
+      padding: 44px 20px;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      margin-top: 18px;
+      border-radius: var(--radius-lg);
+      margin-top: 14px;
       color: var(--muted);
     }
 
-    /* Modal */
+    /* Mobile Bottom Action Bar */
+    .mobile-dock {
+      display: none;
+    }
+
+    /* Modal / Bottom Sheet on Mobile */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(20, 17, 15, 0.58);
+      background: rgba(18, 16, 15, 0.56);
+      backdrop-filter: blur(4px);
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 18px;
+      padding: 16px;
       z-index: 100;
     }
 
@@ -265,20 +390,22 @@
       width: 100%;
       max-width: 440px;
       background: var(--surface);
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
       position: relative;
     }
 
     .modal h2 {
-      margin: 0 0 8px;
-      font-size: 1.25rem;
+      margin: 0 0 6px;
+      font-size: 1.2rem;
+      padding-inline-end: 36px;
     }
 
     .modal p {
-      margin: 0 0 18px;
-      font-size: 0.92rem;
+      margin: 0 0 16px;
+      font-size: 0.88rem;
       color: var(--muted);
     }
 
@@ -290,49 +417,52 @@
       height: 34px;
       border-radius: 50%;
       border: 1px solid var(--border);
-      background: var(--bg);
+      background: var(--surface-2);
       color: var(--text);
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .choice-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: 10px;
+      margin-bottom: 14px;
     }
 
     .choice-card {
       border: 1.5px solid var(--border);
-      border-radius: 14px;
-      padding: 16px 12px;
+      border-radius: 16px;
+      padding: 16px 10px;
       text-align: center;
       cursor: pointer;
       background: var(--bg);
-      transition: all 0.15s ease;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
     }
 
     .choice-card:hover {
       border-color: var(--accent);
-      background: #f2ede4;
+      background: var(--surface-2);
     }
 
     .choice-card strong {
       display: block;
-      font-size: 0.96rem;
-      margin-bottom: 4px;
+      font-size: 0.94rem;
+      margin-bottom: 3px;
     }
 
     .choice-card span {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--muted);
     }
 
     .preview-box {
       display: none;
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .preview-box.has-img {
@@ -340,67 +470,168 @@
     }
 
     .preview-box img {
-      width: 132px;
-      height: 132px;
+      width: 112px;
+      height: 112px;
       border-radius: 50%;
       object-fit: cover;
       border: 3px solid var(--border);
-      margin-bottom: 10px;
+      margin-bottom: 6px;
+    }
+
+    .modal-status {
+      font-size: 0.86rem;
+      color: var(--muted);
+      margin-bottom: 14px;
+      min-height: 20px;
     }
 
     .modal-footer {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
       gap: 10px;
-      justify-content: flex-end;
     }
 
     input[type="file"] {
       display: none;
     }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 720px) {
+      .brand p {
+        display: none;
+      }
+
+      .slot-search {
+        display: none;
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 10px 12px;
+      }
+
+      .toolbar-left {
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+
+      .size-group {
+        width: 100%;
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .size-btn {
+        width: 100%;
+      }
+
+      body.size-small {
+        --card-min: 105px;
+        --img-h: 118px;
+      }
+
+      body.size-medium {
+        --card-min: 155px;
+        --img-h: 165px;
+      }
+
+      body.size-large {
+        --card-min: 280px;
+        --img-h: 270px;
+      }
+
+      .grid {
+        gap: 10px;
+      }
+
+      .mobile-dock {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 45;
+        display: flex;
+        gap: 10px;
+        padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-top: 1px solid var(--border);
+      }
+
+      .mobile-dock .btn-primary {
+        height: 46px;
+        font-size: 0.96rem;
+      }
+
+      .modal-backdrop.open {
+        align-items: flex-end;
+        padding: 0;
+      }
+
+      .modal {
+        max-width: 100%;
+        border-radius: 24px 24px 0 0;
+        padding: 20px 18px calc(20px + env(safe-area-inset-bottom));
+      }
+    }
   </style>
 </head>
 <body class="size-medium">
-  <div class="container">
+  <div class="app-shell">
     <header class="topbar">
       <div class="brand">
         <h1 id="titleText">معرض صور الزفاف</h1>
         <p id="subtitleText">تصفح جميع الصور أو ابحث عن صورك عبر صورة شخصية</p>
       </div>
-      <div class="top-actions">
-        <button class="btn btn-primary" id="openSearchBtn" disabled>
-          <span id="findBtnText">ابحث عن صورك</span>
-        </button>
-        <button class="btn" id="downloadAllBtn" disabled>
-          <span id="downloadAllText">تحميل الكل</span>
-        </button>
-        <button class="btn" id="langToggleBtn">English</button>
+
+      <div class="header-slots">
+        <div class="slot-search">
+          <button class="btn btn-primary" id="openSearchBtnDesktop" disabled>
+            <span id="findBtnTextDesktop">ابحث عن صورك</span>
+          </button>
+        </div>
+        <div class="slot-lang">
+          <button class="btn lang-btn" id="langToggleBtn" type="button">English</button>
+        </div>
       </div>
     </header>
 
     <div class="toolbar">
-      <div class="filter-info">
-        <span id="viewBadgeText">عرض جميع الصور</span>
-        <button class="btn" id="resetFilterBtn" style="display:none; padding: 6px 12px; font-size: 0.84rem;">
-          <span id="showAllText">عرض الكل</span>
-        </button>
+      <div class="toolbar-left">
+        <span class="badge-text" id="viewBadgeText">عرض جميع الصور</span>
+        <div class="result-actions-slot hidden-slot" id="resultActionsSlot">
+          <button class="btn pill-btn" id="resetFilterBtn" type="button">
+            <span id="showAllText">عرض الكل</span>
+          </button>
+          <button class="btn pill-btn btn-primary" id="downloadAllBtn" type="button" style="width:auto;">
+            <span id="downloadAllText">تحميل الكل</span>
+          </button>
+        </div>
       </div>
 
       <div class="size-group" role="group" aria-label="Display size">
-        <button class="size-btn" data-size="small" id="sizeSmallBtn">صغير</button>
-        <button class="size-btn active" data-size="medium" id="sizeMediumBtn">متوسط</button>
-        <button class="size-btn" data-size="large" id="sizeLargeBtn">كبير</button>
+        <button class="size-btn" type="button" data-size="small" id="sizeSmallBtn">صغير</button>
+        <button class="size-btn active" type="button" data-size="medium" id="sizeMediumBtn">متوسط</button>
+        <button class="size-btn" type="button" data-size="large" id="sizeLargeBtn">كبير</button>
       </div>
     </div>
 
-    <div class="status-bar" id="statusText">جاري تحميل الألبوم ونماذج الذكاء الاصطناعي...</div>
+    <div class="status-line" id="statusText">جاري تحميل الألبوم...</div>
     <div class="grid" id="photoGrid"></div>
     <div class="empty-state" id="emptyState" style="display:none;"></div>
+  </div>
+
+  <div class="mobile-dock">
+    <button class="btn btn-primary" id="openSearchBtnMobile" type="button" disabled>
+      <span id="findBtnTextMobile">ابحث عن صورك</span>
+    </button>
   </div>
 
   <!-- Selfie / Upload Modal -->
   <div class="modal-backdrop" id="searchModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal">
-      <button class="modal-close" id="closeModalBtn" aria-label="Close">×</button>
+      <button class="modal-close" id="closeModalBtn" type="button" aria-label="Close">×</button>
       <h2 id="modalTitle">ابحث عن صورك</h2>
       <p id="modalDesc">اختر التقاط سيلفي بالكاميرا أو رفع صورة واضحة لوجهك، ثم اضغط بحث.</p>
 
@@ -419,14 +650,14 @@
 
       <div class="preview-box" id="previewBox">
         <img id="selfiePreview" alt="Selected face" />
-        <div id="selectedFileName" style="font-size:0.84rem; color:var(--muted);"></div>
+        <div id="selectedFileName" style="font-size:0.82rem; color:var(--muted);"></div>
       </div>
 
-      <div id="modalStatus" style="font-size:0.88rem; color:var(--muted); margin-bottom:14px;"></div>
+      <div class="modal-status" id="modalStatus"></div>
 
       <div class="modal-footer">
-        <button class="btn" id="cancelModalBtn">إلغاء</button>
-        <button class="btn btn-primary" id="runSearchBtn" disabled>بحث</button>
+        <button class="btn" id="cancelModalBtn" type="button">إلغاء</button>
+        <button class="btn btn-primary" id="runSearchBtn" type="button" disabled>بحث</button>
       </div>
     </div>
   </div>
@@ -450,17 +681,17 @@
         downloadAll: "تحميل الكل",
         langBtn: "English",
         viewAll: "عرض جميع الصور",
-        viewMatched: "الصور المطابقة لصورتك",
+        viewMatched: "صورك المطابقة",
         showAll: "عرض الكل",
         sizeSmall: "صغير",
         sizeMedium: "متوسط",
         sizeLarge: "كبير",
         downloadOne: "تحميل",
-        openDrive: "فتح في Drive",
+        openDrive: "Drive",
         loadingAlbum: "جاري تحميل الألبوم...",
         loadingAi: "جاري تحميل محرك البحث بالوجه...",
         readyAll: (n) => `جاهز — إجمالي الصور في الألبوم: ${n}`,
-        readyFiltered: (n) => `تم العثور على ${n} صورة مطابقة`,
+        readyFiltered: (n) => `تم العثور على ${n} صورة خاصة بك`,
         noMatches: "لم يتم العثور على صور مطابقة. جرّب صورة أوضح للوجه من الأمام.",
         emptyAlbum: "لا توجد صور في الألبوم حالياً.",
         modalTitle: "ابحث عن صورك",
@@ -473,29 +704,29 @@
         search: "بحث",
         scanning: "جاري تحليل الوجه والبحث في الألبوم...",
         noFace: "لم يتم التعرف على وجه بوضوح. يرجى اختيار صورة أوضح بإضاءة جيدة.",
-        batchNotice: (n) => `سيتم بدء تنزيل ${n} صور. إذا طلب المتصفح السماح بتنزيل عدة ملفات، اضغط «سماح» (Allow).`
+        batchNotice: (n) => `جاري بدء تنزيل ${n} صور. إذا طلب المتصفح السماح بتنزيل عدة ملفات، اضغط «سماح» (Allow).`
       },
       en: {
-        title: "Wedding Photo Gallery",
-        subtitle: "Browse every photo in the album or find yours using a selfie or photo",
-        findBtn: "Find Your Photos",
+        title: "Wedding Gallery",
+        subtitle: "Browse every photo or find yours using a selfie or photo",
+        findBtn: "Find My Photos",
         downloadAll: "Download All",
         langBtn: "العربية",
-        viewAll: "Showing All Photos",
-        viewMatched: "Showing Your Matched Photos",
+        viewAll: "All Photos",
+        viewMatched: "Your Matched Photos",
         showAll: "Show All",
         sizeSmall: "Small",
         sizeMedium: "Medium",
         sizeLarge: "Large",
         downloadOne: "Download",
-        openDrive: "Open Drive",
+        openDrive: "Drive",
         loadingAlbum: "Loading album...",
         loadingAi: "Loading face-search engine...",
         readyAll: (n) => `Ready — Total photos in album: ${n}`,
-        readyFiltered: (n) => `Found ${n} matching photo(s)`,
+        readyFiltered: (n) => `Found ${n} photo(s) of you`,
         noMatches: "No matching photos found. Try a clearer, front-facing photo in good light.",
         emptyAlbum: "No photos in the album yet.",
-        modalTitle: "Find Your Photos",
+        modalTitle: "Find My Photos",
         modalDesc: "Take a selfie with your camera or upload a clear photo of your face, then tap Search.",
         cameraTitle: "Take Selfie",
         cameraSub: "Open front camera",
@@ -523,6 +754,18 @@
       return typeof val === "function" ? val(...args) : val;
     }
 
+    function syncResultActionSlot() {
+      const slot = $("resultActionsSlot");
+      const dlAllBtn = $("downloadAllBtn");
+      if (!isFiltered) {
+        slot.classList.add("hidden-slot");
+        dlAllBtn.disabled = true;
+      } else {
+        slot.classList.remove("hidden-slot");
+        dlAllBtn.disabled = displayedPhotos.length === 0;
+      }
+    }
+
     function applyLanguage(newLang) {
       lang = newLang;
       document.documentElement.lang = lang;
@@ -530,7 +773,8 @@
 
       $("titleText").textContent = t("title");
       $("subtitleText").textContent = t("subtitle");
-      $("findBtnText").textContent = t("findBtn");
+      $("findBtnTextDesktop").textContent = t("findBtn");
+      $("findBtnTextMobile").textContent = t("findBtn");
       $("downloadAllText").textContent = t("downloadAll");
       $("langToggleBtn").textContent = t("langBtn");
       $("showAllText").textContent = t("showAll");
@@ -548,7 +792,7 @@
       $("runSearchBtn").textContent = t("search");
 
       $("viewBadgeText").textContent = isFiltered ? t("viewMatched") : t("viewAll");
-      $("resetFilterBtn").style.display = isFiltered ? "inline-flex" : "none";
+      syncResultActionSlot();
 
       if (allPhotos.length > 0) {
         $("statusText").textContent = isFiltered
@@ -581,8 +825,8 @@
             <div class="card-body">
               <div class="card-name" title="${photo.name || ""}">${photo.name || photo.id}</div>
               <div class="card-actions">
-                <a class="card-link" href="${downloadUrl}" target="_blank" rel="noopener">${t("downloadOne")}</a>
-                <a class="card-link" href="${viewUrl}" target="_blank" rel="noopener">${t("openDrive")}</a>
+                <a class="card-dl" href="${downloadUrl}" target="_blank" rel="noopener">${t("downloadOne")}</a>
+                <a class="card-view" href="${viewUrl}" target="_blank" rel="noopener">${t("openDrive")}</a>
               </div>
             </div>
           </article>
@@ -652,6 +896,15 @@
       }
     }
 
+    function openSearchModal() {
+      $("modalStatus").textContent = "";
+      $("searchModal").classList.add("open");
+    }
+
+    function closeSearchModal() {
+      $("searchModal").classList.remove("open");
+    }
+
     $("langToggleBtn").addEventListener("click", () => {
       applyLanguage(lang === "ar" ? "en" : "ar");
     });
@@ -665,19 +918,12 @@
       });
     });
 
-    $("openSearchBtn").addEventListener("click", () => {
-      $("modalStatus").textContent = "";
-      $("searchModal").classList.add("open");
-    });
-
-    function closeModal() {
-      $("searchModal").classList.remove("open");
-    }
-
-    $("closeModalBtn").addEventListener("click", closeModal);
-    $("cancelModalBtn").addEventListener("click", closeModal);
+    $("openSearchBtnDesktop").addEventListener("click", openSearchModal);
+    $("openSearchBtnMobile").addEventListener("click", openSearchModal);
+    $("closeModalBtn").addEventListener("click", closeSearchModal);
+    $("cancelModalBtn").addEventListener("click", closeSearchModal);
     $("searchModal").addEventListener("click", (e) => {
-      if (e.target === $("searchModal")) closeModal();
+      if (e.target === $("searchModal")) closeSearchModal();
     });
 
     $("cameraInput").addEventListener("change", (e) => handleFileSelection(e.target.files[0]));
@@ -707,13 +953,13 @@
         isFiltered = true;
         displayedPhotos = matched;
         $("viewBadgeText").textContent = t("viewMatched");
-        $("resetFilterBtn").style.display = "inline-flex";
+        syncResultActionSlot();
         $("statusText").textContent = matched.length > 0
           ? t("readyFiltered", matched.length)
           : t("noMatches");
 
         renderGrid(displayedPhotos);
-        closeModal();
+        closeSearchModal();
       } catch (err) {
         $("modalStatus").textContent = err.message || "Error scanning photo";
       } finally {
@@ -725,13 +971,13 @@
       isFiltered = false;
       displayedPhotos = [...allPhotos];
       $("viewBadgeText").textContent = t("viewAll");
-      $("resetFilterBtn").style.display = "none";
+      syncResultActionSlot();
       $("statusText").textContent = t("readyAll", allPhotos.length);
       renderGrid(displayedPhotos);
     });
 
     $("downloadAllBtn").addEventListener("click", () => {
-      if (!displayedPhotos.length) return;
+      if (!isFiltered || !displayedPhotos.length) return;
       $("statusText").textContent = t("batchNotice", displayedPhotos.length);
       displayedPhotos.forEach((photo, idx) => {
         setTimeout(() => {
@@ -749,6 +995,7 @@
 
     async function init() {
       applyLanguage("ar");
+      syncResultActionSlot();
       $("statusText").textContent = t("loadingAlbum");
 
       try {
@@ -758,15 +1005,13 @@
         displayedPhotos = [...allPhotos];
         renderGrid(displayedPhotos);
 
-        if (displayedPhotos.length > 0) {
-          $("downloadAllBtn").disabled = false;
-        }
         $("statusText").textContent = `${t("readyAll", allPhotos.length)} — ${t("loadingAi")}`;
 
         await ensureFaceApiLoaded();
         await loadModelsWithFallback();
         aiReady = true;
-        $("openSearchBtn").disabled = false;
+        $("openSearchBtnDesktop").disabled = false;
+        $("openSearchBtnMobile").disabled = false;
         $("statusText").textContent = t("readyAll", allPhotos.length);
       } catch (err) {
         $("statusText").textContent = `Error: ${err.message}`;
