@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>معرض صور عقد غران عباس</title>
+  <title>معرض صور عقد قران عباس</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -60,6 +60,7 @@
       padding: 14px 14px 64px;
     }
 
+    /* Locked physical LTR header: Language left, Title center, Find My Photos right */
     header.topbar {
       direction: ltr;
       position: sticky;
@@ -78,8 +79,16 @@
       box-shadow: var(--shadow);
     }
 
-    .header-left { width: 92px; flex-shrink: 0; }
-    .header-center { direction: inherit; text-align: center; min-width: 0; }
+    .header-left {
+      width: 92px;
+      flex-shrink: 0;
+    }
+
+    .header-center {
+      direction: inherit;
+      text-align: center;
+      min-width: 0;
+    }
 
     .header-center h1 {
       margin: 0;
@@ -100,7 +109,12 @@
       text-overflow: ellipsis;
     }
 
-    .header-right { width: 168px; flex-shrink: 0; display: flex; justify-content: flex-end; }
+    .header-right {
+      width: 168px;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: flex-end;
+    }
 
     .btn {
       display: inline-flex;
@@ -140,14 +154,19 @@
       border-color: var(--find-amber-hover);
     }
 
-    .lang-btn { width: 100%; padding: 0 10px; font-size: 0.9rem; }
+    .lang-btn {
+      width: 100%;
+      padding: 0 10px;
+      font-size: 0.9rem;
+    }
 
+    /* Locked physical LTR toolbar so controls stay in fixed spots across languages */
     .toolbar {
-      display: flex;
-      flex-wrap: wrap;
+      direction: ltr;
+      display: grid;
+      grid-template-columns: auto 1fr;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
+      gap: 12px;
       margin-top: 12px;
       padding: 12px 14px;
       background: var(--surface);
@@ -157,7 +176,6 @@
     }
 
     .size-group {
-      direction: ltr;
       display: inline-grid;
       grid-template-columns: repeat(3, 78px);
       background: var(--surface-2);
@@ -183,8 +201,10 @@
     .size-btn.active { background: var(--accent); color: var(--accent-text); }
 
     .toolbar-actions {
+      direction: inherit;
       display: flex;
       align-items: center;
+      justify-content: flex-end;
       flex-wrap: wrap;
       gap: 8px;
       min-width: 0;
@@ -419,7 +439,7 @@
       .header-right { display: none; }
       .header-center p { display: none; }
       .header-center h1 { font-size: 1.06rem; }
-      .toolbar { flex-direction: column; align-items: stretch; padding: 10px; }
+      .toolbar { grid-template-columns: 1fr; gap: 10px; padding: 10px; }
       .size-group { width: 100%; grid-template-columns: repeat(3, 1fr); }
       .size-btn { width: 100%; }
       .toolbar-actions { justify-content: flex-start; }
@@ -454,7 +474,7 @@
       </div>
 
       <div class="header-center">
-        <h1 id="titleText">معرض صور عقد غران عباس</h1>
+        <h1 id="titleText">معرض صور عقد قران عباس</h1>
         <p id="subtitleText">تصفح جميع الصور أو ابحث عن صورك بسهولة</p>
       </div>
 
@@ -543,7 +563,7 @@
 
       const I18N = {
         ar: {
-          title: "معرض صور عقد غران عباس",
+          title: "معرض صور عقد قران عباس",
           subtitle: "تصفح جميع الصور أو ابحث عن صورك بسهولة",
           findBtn: "ابحث عن صورك",
           langBtn: "English",
@@ -577,7 +597,7 @@
           noFace: "لم يتم التعرف على وجه بوضوح. جرّب صورة أوضح بإضاءة جيدة."
         },
         en: {
-          title: "معرض صور عقد غران عباس",
+          title: "Abbas Nikah Photo Gallery",
           subtitle: "Browse all photos or find yours easily",
           findBtn: "Find My Photos",
           langBtn: "العربية",
@@ -662,6 +682,7 @@
         lang = newLang;
         document.documentElement.lang = lang;
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+        document.title = t("title");
 
         $("titleText").textContent = t("title");
         $("subtitleText").textContent = t("subtitle");
