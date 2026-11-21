@@ -44,45 +44,47 @@
     .app-shell {
       max-width: 1260px;
       margin: 0 auto;
-      padding: 14px 14px calc(92px + env(safe-area-inset-bottom));
+      padding: 14px 14px 48px;
     }
 
+    /* Physically anchored LTR row: Language left, Title center, Find My Photos right */
     header.topbar {
+      direction: ltr;
       position: sticky;
       top: 10px;
       z-index: 40;
       display: grid;
-      grid-template-columns: minmax(215px, auto) 1fr minmax(215px, auto);
+      grid-template-columns: 84px 1fr 148px;
       align-items: center;
       gap: 10px;
       background: rgba(255, 255, 255, 0.94);
       backdrop-filter: blur(12px);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 12px 16px;
+      padding: 12px 14px;
       box-shadow: var(--shadow);
     }
 
     .header-left {
-      direction: ltr;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      justify-self: start;
+      width: 84px;
+      flex-shrink: 0;
     }
 
-    .lang-slot { width: 78px; flex-shrink: 0; }
-    .search-slot { width: 142px; flex-shrink: 0; }
+    .header-center {
+      direction: inherit;
+      text-align: center;
+      min-width: 0;
+    }
 
-    .header-center { text-align: center; min-width: 0; }
     .header-center h1 {
       margin: 0;
-      font-size: clamp(1.1rem, 2.2vw, 1.45rem);
+      font-size: clamp(1.05rem, 2.2vw, 1.45rem);
       font-weight: 700;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
     .header-center p {
       margin: 2px 0 0;
       font-size: 0.82rem;
@@ -91,7 +93,13 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .header-right-spacer { justify-self: end; min-width: 1px; }
+
+    .header-right {
+      width: 148px;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: flex-end;
+    }
 
     .btn {
       display: inline-flex;
@@ -116,9 +124,11 @@
     .btn-primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
     .btn-primary:hover:not(:disabled) { background: var(--accent-hover); border-color: var(--accent-hover); }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
     .lang-btn { width: 100%; padding: 0 8px; font-size: 0.82rem; }
     .search-btn { width: 100%; padding: 0 12px; font-size: 0.84rem; }
 
+    /* Toolbar: Grid size locked on physical left, actions on right */
     .toolbar {
       direction: ltr;
       display: grid;
@@ -212,6 +222,7 @@
       overflow: hidden;
     }
 
+    /* Upper-half framing so faces remain clearly visible */
     .card-media img {
       width: 100%;
       height: 100%;
@@ -220,22 +231,27 @@
       display: block;
     }
 
+    /* Hidden unless multi-select mode is active */
     .select-check {
+      display: none;
       position: absolute;
       top: 8px;
-      inset-inline-start: 8px;
-      width: 26px;
-      height: 26px;
+      right: 8px;
+      width: 28px;
+      height: 28px;
       border-radius: 8px;
-      border: 1.5px solid rgba(255, 255, 255, 0.9);
-      background: rgba(24, 22, 21, 0.55);
+      border: 1.5px solid rgba(255, 255, 255, 0.95);
+      background: rgba(24, 22, 21, 0.62);
       color: #ffffff;
-      display: inline-flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       font-weight: 700;
+    }
+
+    body.multiselect-active .select-check {
+      display: inline-flex;
     }
 
     .card.selected .select-check { background: var(--accent); border-color: var(--accent); }
@@ -257,6 +273,8 @@
       font-size: 0.8rem;
       font-weight: 600;
     }
+
+    .card-dl:hover { background: var(--accent-hover); }
 
     .card-view {
       display: inline-flex;
@@ -282,8 +300,6 @@
       margin-top: 12px;
       color: var(--muted);
     }
-
-    .mobile-dock { display: none; }
 
     .modal-backdrop {
       position: fixed;
@@ -354,33 +370,32 @@
     .modal-footer { display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; }
     input[type="file"] { display: none; }
 
-    @media (max-width: 820px) {
-      header.topbar { grid-template-columns: auto 1fr auto; padding: 10px 12px; }
-      .lang-slot { width: 72px; }
-      .search-slot { display: none; }
+    @media (max-width: 720px) {
+      header.topbar {
+        grid-template-columns: 68px 1fr 112px;
+        gap: 6px;
+        padding: 10px;
+      }
+
+      .header-left { width: 68px; }
+      .header-right { width: 112px; }
       .header-center p { display: none; }
-      .header-right-spacer { width: 72px; }
+      .header-center h1 { font-size: 0.96rem; }
+
+      .btn { height: 36px; font-size: 0.78rem; padding: 0 8px; }
+      .lang-btn { font-size: 0.75rem; padding: 0 4px; }
+      .search-btn { font-size: 0.76rem; padding: 0 8px; }
+
       .toolbar { grid-template-columns: 1fr; gap: 10px; padding: 10px; }
       .size-group { width: 100%; grid-template-columns: repeat(3, 1fr); }
       .size-btn { width: 100%; }
-      .toolbar-right { justify-content: space-between; }
+      .toolbar-right { justify-content: flex-start; }
+
       body.size-small { --card-min: 106px; --img-h: 124px; }
       body.size-medium { --card-min: 156px; --img-h: 175px; }
       body.size-large { --card-min: 280px; --img-h: 285px; }
       .grid { gap: 10px; }
-      .mobile-dock {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 45;
-        display: flex;
-        gap: 10px;
-        padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
-        background: rgba(255, 255, 255, 0.94);
-        border-top: 1px solid var(--border);
-      }
-      .mobile-dock .btn-primary { width: 100%; height: 46px; font-size: 0.94rem; }
+
       .modal-backdrop.open { align-items: flex-end; padding: 0; }
       .modal { max-width: 100%; border-radius: 24px 24px 0 0; padding: 20px 16px calc(20px + env(safe-area-inset-bottom)); }
     }
@@ -390,14 +405,7 @@
   <div class="app-shell">
     <header class="topbar">
       <div class="header-left">
-        <div class="lang-slot">
-          <button class="btn lang-btn" id="langToggleBtn" type="button">English</button>
-        </div>
-        <div class="search-slot">
-          <button class="btn btn-primary search-btn" id="openSearchBtnDesktop" type="button">
-            <span id="findBtnTextDesktop">ابحث عن صورك</span>
-          </button>
-        </div>
+        <button class="btn lang-btn" id="langToggleBtn" type="button">English</button>
       </div>
 
       <div class="header-center">
@@ -405,7 +413,11 @@
         <p id="subtitleText">تصفح جميع الصور أو ابحث عن صورك عبر صورة شخصية</p>
       </div>
 
-      <div class="header-right-spacer" aria-hidden="true"></div>
+      <div class="header-right">
+        <button class="btn btn-primary search-btn" id="openSearchBtn" type="button">
+          <span id="findBtnText">ابحث عن صورك</span>
+        </button>
+      </div>
     </header>
 
     <div class="toolbar">
@@ -418,12 +430,12 @@
       <div class="toolbar-right">
         <span class="badge-pill" id="viewBadgeText">جميع الصور</span>
 
-        <button class="btn pill-btn" id="selectAllVisibleBtn" type="button" style="display:none;">
-          <span id="selectAllText">تحديد الكل</span>
+        <button class="btn pill-btn" id="toggleMultiBtn" type="button">
+          <span id="multiSelectText">تحديد متعدد</span>
         </button>
 
-        <button class="btn pill-btn" id="clearSelectionBtn" type="button" style="display:none;">
-          <span id="clearSelText">إلغاء التحديد</span>
+        <button class="btn pill-btn" id="selectAllVisibleBtn" type="button" style="display:none;">
+          <span id="selectAllText">تحديد الكل</span>
         </button>
 
         <button class="btn btn-primary pill-btn" id="downloadSelectedBtn" type="button" style="display:none;">
@@ -443,12 +455,6 @@
     <div class="status-line" id="statusText">جاري تحميل الألبوم...</div>
     <div class="grid" id="photoGrid"></div>
     <div class="empty-state" id="emptyState" style="display:none;"></div>
-  </div>
-
-  <div class="mobile-dock">
-    <button class="btn btn-primary" id="openSearchBtnMobile" type="button">
-      <span id="findBtnTextMobile">ابحث عن صورك</span>
-    </button>
   </div>
 
   <div class="modal-backdrop" id="searchModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
@@ -503,8 +509,9 @@
           findBtn: "ابحث عن صورك",
           downloadAll: "تحميل الكل",
           downloadSelected: "تحميل المحدد",
+          multiSelect: "تحديد متعدد",
+          doneSelect: "إنهاء التحديد",
           selectAll: "تحديد الكل",
-          clearSel: "إلغاء التحديد",
           langBtn: "English",
           viewAll: "جميع الصور",
           viewMatched: "صورك المطابقة",
@@ -538,8 +545,9 @@
           findBtn: "Find My Photos",
           downloadAll: "Download All",
           downloadSelected: "Download Selected",
+          multiSelect: "Multi-Select",
+          doneSelect: "Done",
           selectAll: "Select All",
-          clearSel: "Clear",
           langBtn: "العربية",
           viewAll: "All Photos",
           viewMatched: "Your Matched Photos",
@@ -573,6 +581,7 @@
       let allPhotos = [];
       let displayedPhotos = [];
       const selectedIds = new Set();
+      let multiSelectMode = false;
       let isFiltered = false;
       let aiReady = false;
       let aiLoadingPromise = null;
@@ -605,12 +614,15 @@
         const hasPhotos = displayedPhotos.length > 0;
         const selCount = selectedIds.size;
 
+        document.body.classList.toggle("multiselect-active", multiSelectMode);
         $("viewBadgeText").textContent = isFiltered ? t("viewMatched") : t("viewAll");
         $("resetFilterBtn").style.display = isFiltered ? "inline-flex" : "none";
         $("downloadAllBtn").style.display = (isFiltered && hasPhotos) ? "inline-flex" : "none";
-        $("selectAllVisibleBtn").style.display = hasPhotos ? "inline-flex" : "none";
-        $("clearSelectionBtn").style.display = selCount > 0 ? "inline-flex" : "none";
-        $("downloadSelectedBtn").style.display = selCount > 0 ? "inline-flex" : "none";
+
+        $("toggleMultiBtn").style.display = hasPhotos ? "inline-flex" : "none";
+        $("multiSelectText").textContent = multiSelectMode ? t("doneSelect") : t("multiSelect");
+        $("selectAllVisibleBtn").style.display = (multiSelectMode && hasPhotos) ? "inline-flex" : "none";
+        $("downloadSelectedBtn").style.display = (multiSelectMode && selCount > 0) ? "inline-flex" : "none";
         $("selectedCountSpan").textContent = String(selCount);
       }
 
@@ -621,12 +633,10 @@
 
         $("titleText").textContent = t("title");
         $("subtitleText").textContent = t("subtitle");
-        $("findBtnTextDesktop").textContent = t("findBtn");
-        $("findBtnTextMobile").textContent = t("findBtn");
+        $("findBtnText").textContent = t("findBtn");
         $("downloadAllText").textContent = t("downloadAll");
         $("downloadSelectedText").textContent = t("downloadSelected");
         $("selectAllText").textContent = t("selectAll");
-        $("clearSelText").textContent = t("clearSel");
         $("langToggleBtn").textContent = t("langBtn");
         $("showAllText").textContent = t("showAll");
         $("sizeSmallBtn").textContent = t("sizeSmall");
@@ -810,10 +820,25 @@
         });
       });
 
+      $("toggleMultiBtn").addEventListener("click", () => {
+        multiSelectMode = !multiSelectMode;
+        if (!multiSelectMode) {
+          selectedIds.clear();
+        }
+        syncToolbarButtons();
+        renderGrid(displayedPhotos);
+      });
+
       $("photoGrid").addEventListener("click", (e) => {
+        if (!multiSelectMode) return;
         const checkBtn = e.target.closest("[data-select-id]");
-        if (!checkBtn) return;
-        const id = checkBtn.getAttribute("data-select-id");
+        const cardEl = e.target.closest(".card");
+        const clickedLink = e.target.closest("a");
+        if (clickedLink) return;
+
+        const id = checkBtn ? checkBtn.getAttribute("data-select-id") : (cardEl ? cardEl.getAttribute("data-id") : null);
+        if (!id) return;
+
         if (selectedIds.has(id)) selectedIds.delete(id);
         else selectedIds.add(id);
         syncToolbarButtons();
@@ -826,18 +851,11 @@
         renderGrid(displayedPhotos);
       });
 
-      $("clearSelectionBtn").addEventListener("click", () => {
-        selectedIds.clear();
-        syncToolbarButtons();
-        renderGrid(displayedPhotos);
-      });
-
       $("downloadSelectedBtn").addEventListener("click", () => {
         triggerBatchDownload(allPhotos.filter((p) => selectedIds.has(p.id)));
       });
 
-      $("openSearchBtnDesktop").addEventListener("click", openSearchModal);
-      $("openSearchBtnMobile").addEventListener("click", openSearchModal);
+      $("openSearchBtn").addEventListener("click", openSearchModal);
       $("closeModalBtn").addEventListener("click", closeSearchModal);
       $("cancelModalBtn").addEventListener("click", closeSearchModal);
       $("searchModal").addEventListener("click", (e) => {
@@ -873,6 +891,7 @@
           isFiltered = true;
           displayedPhotos = matched;
           selectedIds.clear();
+          multiSelectMode = false;
           syncToolbarButtons();
           $("statusText").textContent = matched.length > 0 ? t("readyFiltered", matched.length) : t("noMatches");
           renderGrid(displayedPhotos);
@@ -887,6 +906,7 @@
       $("resetFilterBtn").addEventListener("click", () => {
         clearSelfieMemory();
         isFiltered = false;
+        multiSelectMode = false;
         displayedPhotos = [...allPhotos];
         selectedIds.clear();
         syncToolbarButtons();
