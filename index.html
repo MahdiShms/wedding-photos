@@ -20,7 +20,7 @@
       --border: #dcd5ca;
       --radius-lg: 20px;
       --radius-md: 16px;
-      --radius-sm: 12px;
+      --radius-sm: 11px;
       --shadow: 0 8px 24px rgba(21, 19, 18, 0.06);
       --float-shadow: 0 14px 34px rgba(21, 19, 18, 0.22);
       --card-min: 235px;
@@ -49,10 +49,10 @@
     .app-shell {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 14px 14px 128px;
+      padding: 14px 14px 136px;
     }
 
-    /* Sticky top bar: Language left, Title centered, Find My Photos right on desktop */
+    /* Sticky top bar: Language left, Title center, Find My Photos right on desktop */
     header.topbar {
       direction: ltr;
       position: sticky;
@@ -83,7 +83,7 @@
 
     .header-center h1 {
       margin: 0;
-      font-size: clamp(1.12rem, 2.3vw, 1.55rem);
+      font-size: clamp(1.1rem, 2.3vw, 1.55rem);
       font-weight: 700;
       white-space: nowrap;
       overflow: hidden;
@@ -158,13 +158,13 @@
       font-size: 0.92rem;
     }
 
-    /* Toolbar: Grid display controls left, actions & view indicator right */
+    /* Toolbar */
     .toolbar {
-      direction: ltr;
-      display: grid;
-      grid-template-columns: auto 1fr;
+      display: flex;
+      flex-wrap: wrap;
       align-items: center;
-      gap: 12px;
+      justify-content: space-between;
+      gap: 10px;
       margin-top: 12px;
       padding: 12px 14px;
       background: var(--surface);
@@ -173,6 +173,7 @@
     }
 
     .size-group {
+      direction: ltr;
       display: inline-grid;
       grid-template-columns: repeat(3, 76px);
       background: var(--surface-2);
@@ -199,18 +200,16 @@
       color: var(--accent-text);
     }
 
-    .toolbar-right {
-      direction: inherit;
+    .toolbar-actions {
       display: flex;
       align-items: center;
-      justify-content: flex-end;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
       min-width: 0;
     }
 
     .badge-pill {
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-weight: 700;
       padding: 8px 14px;
       border-radius: 999px;
@@ -220,15 +219,15 @@
     }
 
     .action-pill {
-      min-height: 40px;
-      padding: 0 15px;
-      font-size: 0.9rem;
+      min-height: 38px;
+      padding: 0 14px;
+      font-size: 0.88rem;
     }
 
     .status-line {
       margin-top: 10px;
       padding-inline: 6px;
-      font-size: 0.95rem;
+      font-size: 0.94rem;
       font-weight: 600;
       color: var(--muted);
       min-height: 24px;
@@ -236,8 +235,8 @@
 
     /* Display sizes */
     body.size-small {
-      --card-min: 165px;
-      --img-h: 175px;
+      --card-min: 170px;
+      --img-h: 180px;
     }
 
     body.size-medium {
@@ -253,7 +252,7 @@
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(var(--card-min), 1fr));
-      gap: 16px;
+      gap: 14px;
       margin-top: 10px;
     }
 
@@ -266,6 +265,7 @@
       box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
+      min-width: 0;
     }
 
     .card.selected {
@@ -281,7 +281,6 @@
       overflow: hidden;
     }
 
-    /* Upper-half framing so faces stay clearly visible */
     .card-media img {
       width: 100%;
       height: 100%;
@@ -290,12 +289,11 @@
       display: block;
     }
 
-    /* Hidden until Multi-Select is turned on */
     .select-check {
       display: none;
       position: absolute;
       top: 10px;
-      right: 10px;
+      inset-inline-end: 10px;
       width: 34px;
       height: 34px;
       border-radius: 10px;
@@ -319,16 +317,17 @@
     }
 
     .card-body {
-      padding: 12px;
+      padding: 10px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
       flex: 1;
       justify-content: space-between;
+      min-width: 0;
     }
 
     .card-name {
-      font-size: 0.86rem;
+      font-size: 0.82rem;
       font-weight: 600;
       color: var(--muted);
       white-space: nowrap;
@@ -337,22 +336,22 @@
     }
 
     .card-actions {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
     .card-dl {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 42px;
-      padding: 0 12px;
+      min-height: 38px;
+      padding: 0 10px;
       border-radius: var(--radius-sm);
       background: var(--accent);
       color: var(--accent-text);
       text-decoration: none;
-      font-size: 0.92rem;
+      font-size: 0.86rem;
       font-weight: 700;
     }
 
@@ -364,15 +363,15 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 42px;
-      padding: 0 11px;
+      min-height: 34px;
+      padding: 0 10px;
       border-radius: var(--radius-sm);
       background: var(--surface-2);
       color: var(--text);
       text-decoration: none;
-      font-size: 0.86rem;
+      font-size: 0.8rem;
       font-weight: 700;
-      border: 1.5px solid var(--border);
+      border: 1px solid var(--border);
     }
 
     .empty-state {
@@ -386,12 +385,12 @@
       color: var(--muted);
     }
 
-    /* Floating bottom-right download bar (when multi-select has items or search is filtered) */
+    /* Floating bottom-right download bar */
     .floating-download {
       display: none;
       position: fixed;
       bottom: 20px;
-      right: 20px;
+      inset-inline-end: 20px;
       z-index: 48;
       align-items: center;
       gap: 10px;
@@ -407,7 +406,7 @@
     }
 
     .floating-label {
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-weight: 700;
       color: var(--text);
       white-space: nowrap;
@@ -418,7 +417,7 @@
       display: none;
     }
 
-    /* Modal */
+    /* Modals */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -436,24 +435,26 @@
 
     .modal {
       width: 100%;
-      max-width: 460px;
+      max-width: 480px;
+      max-height: 88vh;
+      overflow-y: auto;
       background: var(--surface);
       border: 1.5px solid var(--border);
       border-radius: 24px;
-      padding: 24px;
+      padding: 22px;
       box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
       position: relative;
     }
 
     .modal h2 {
       margin: 0 0 8px;
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       padding-inline-end: 40px;
     }
 
     .modal p {
-      margin: 0 0 18px;
-      font-size: 0.96rem;
+      margin: 0 0 16px;
+      font-size: 0.94rem;
       color: var(--muted);
     }
 
@@ -481,7 +482,7 @@
     .choice-card {
       border: 2px solid var(--border);
       border-radius: 18px;
-      padding: 18px 12px;
+      padding: 16px 12px;
       text-align: center;
       cursor: pointer;
       background: var(--bg);
@@ -494,12 +495,12 @@
 
     .choice-card strong {
       display: block;
-      font-size: 1.02rem;
+      font-size: 1rem;
       margin-bottom: 4px;
     }
 
     .choice-card span {
-      font-size: 0.86rem;
+      font-size: 0.84rem;
       color: var(--muted);
     }
 
@@ -514,8 +515,8 @@
     }
 
     .preview-box img {
-      width: 120px;
-      height: 120px;
+      width: 116px;
+      height: 116px;
       border-radius: 50%;
       object-fit: cover;
       object-position: center 16%;
@@ -524,7 +525,7 @@
     }
 
     .modal-status {
-      font-size: 0.94rem;
+      font-size: 0.92rem;
       font-weight: 600;
       color: var(--muted);
       margin-bottom: 14px;
@@ -537,17 +538,43 @@
       gap: 10px;
     }
 
+    .phone-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 12px 0 16px;
+    }
+
+    .phone-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+    }
+
+    .phone-row span {
+      font-size: 0.86rem;
+      font-weight: 600;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     input[type="file"] {
       display: none;
     }
 
     @media (max-width: 760px) {
       .app-shell {
-        padding-bottom: 150px;
+        padding-bottom: 156px;
       }
 
       header.topbar {
-        grid-template-columns: 84px 1fr 16px;
+        grid-template-columns: 84px 1fr 8px;
         gap: 8px;
         padding: 10px 12px;
       }
@@ -565,12 +592,12 @@
       }
 
       .header-center h1 {
-        font-size: 1.08rem;
+        font-size: 1.06rem;
       }
 
       .toolbar {
-        grid-template-columns: 1fr;
-        gap: 10px;
+        flex-direction: column;
+        align-items: stretch;
         padding: 10px;
       }
 
@@ -583,7 +610,7 @@
         width: 100%;
       }
 
-      .toolbar-right {
+      .toolbar-actions {
         justify-content: flex-start;
       }
 
@@ -603,10 +630,9 @@
       }
 
       .grid {
-        gap: 12px;
+        gap: 10px;
       }
 
-      /* Mobile bottom dock for Find My Photos */
       .mobile-find-dock {
         position: fixed;
         bottom: 0;
@@ -625,11 +651,9 @@
         font-size: 1rem;
       }
 
-      /* Lift floating download bar above the mobile Find My Photos dock */
       .floating-download {
         bottom: calc(74px + env(safe-area-inset-bottom));
-        right: 12px;
-        left: 12px;
+        inset-inline: 12px;
         justify-content: space-between;
         border-radius: 18px;
         padding: 10px 12px;
@@ -643,7 +667,7 @@
       .modal {
         max-width: 100%;
         border-radius: 24px 24px 0 0;
-        padding: 22px 18px calc(22px + env(safe-area-inset-bottom));
+        padding: 20px 16px calc(22px + env(safe-area-inset-bottom));
       }
     }
   </style>
@@ -674,7 +698,7 @@
         <button class="size-btn" type="button" data-size="large" id="sizeLargeBtn">كبير</button>
       </div>
 
-      <div class="toolbar-right">
+      <div class="toolbar-actions">
         <span class="badge-pill" id="viewBadgeText">جميع الصور</span>
 
         <button class="btn action-pill" id="toggleMultiBtn" type="button">
@@ -700,7 +724,7 @@
   <div class="floating-download" id="floatingDownloadBar" aria-live="polite">
     <span class="floating-label" id="floatingLabelText"></span>
     <button class="btn btn-primary action-pill" id="floatingDownloadBtn" type="button">
-      <span id="floatingDownloadBtnText">تحميل</span>
+      <span id="floatingDownloadBtnText">تحميل ZIP</span>
     </button>
   </div>
 
@@ -745,6 +769,17 @@
     </div>
   </div>
 
+  <!-- Phone / Direct Download Helper Modal -->
+  <div class="modal-backdrop" id="phoneDownloadModal" role="dialog" aria-modal="true" aria-labelledby="phoneModalTitle">
+    <div class="modal">
+      <button class="modal-close" id="closePhoneModalBtn" type="button" aria-label="Close">×</button>
+      <h2 id="phoneModalTitle">تحميل الصور المختارة</h2>
+      <p id="phoneModalDesc">على الآيفون، اضغط «فتح / حفظ» لكل صورة أو استخدم «مشاركة» لحفظها مباشرة في الصور.</p>
+      <div class="phone-list" id="phoneDownloadList"></div>
+      <button class="btn btn-primary" style="width:100%;" id="donePhoneModalBtn" type="button">تم</button>
+    </div>
+  </div>
+
   <script>
     (function () {
       const SCRIPT_URLS = [
@@ -755,6 +790,10 @@
         "https://unpkg.com/@vladmandic/face-api/model",
         "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model"
       ];
+      const JSZIP_URLS = [
+        "https://unpkg.com/jszip@3.10.1/dist/jszip.min.js",
+        "https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"
+      ];
       const THRESHOLD = 0.50;
 
       const I18N = {
@@ -762,8 +801,8 @@
           title: "معرض صور الزفاف",
           subtitle: "تصفح جميع الصور أو ابحث عن صورك بسهولة",
           findBtn: "ابحث عن صورك",
-          downloadAll: "تحميل الكل",
-          downloadSelected: "تحميل المحدد",
+          downloadZip: "تحميل ملف ZIP",
+          downloadPhoneBatch: "تحميل الصور",
           multiSelect: "تحديد متعدد",
           doneSelect: "إنهاء التحديد",
           selectAll: "تحديد الكل",
@@ -794,14 +833,19 @@
           noFace: "لم يتم التعرف على وجه بوضوح. جرّب صورة أوضح بإضاءة جيدة.",
           floatingSelected: (n) => "تم تحديد " + n + " صورة",
           floatingMatchedAll: (n) => "صورك المطابقة (" + n + ")",
-          batchNotice: (n) => "جاري بدء تنزيل " + n + " صور. إذا طلب المتصفح السماح بتنزيل عدة ملفات، اضغط «سماح» (Allow)."
+          buildingZip: (done, total) => "جاري تجهيز ملف ZIP... (" + done + "/" + total + ")",
+          zipReady: "تم تجهيز ملف ZIP وبدء التحميل!",
+          phoneModalTitle: "تحميل الصور المختارة",
+          phoneModalDesc: "على الآيفون، افتح كل صورة واضغط مطولاً أو «مشاركة ← حفظ الصورة» لحفظها في ألبوم الصور.",
+          openPhoto: "فتح الصورة",
+          doneBtn: "تم"
         },
         en: {
           title: "Wedding Gallery",
           subtitle: "Browse all photos or find yours easily",
           findBtn: "Find My Photos",
-          downloadAll: "Download All",
-          downloadSelected: "Download Selected",
+          downloadZip: "Download ZIP",
+          downloadPhoneBatch: "Get Photos",
           multiSelect: "Multi-Select",
           doneSelect: "Done",
           selectAll: "Select All",
@@ -832,9 +876,17 @@
           noFace: "Couldn't clearly detect a face. Try a clearer photo in good lighting.",
           floatingSelected: (n) => n + " photo(s) selected",
           floatingMatchedAll: (n) => "Your matched photos (" + n + ")",
-          batchNotice: (n) => "Starting download for " + n + " photos. If prompted for multiple downloads, click Allow."
+          buildingZip: (done, total) => "Building ZIP archive... (" + done + "/" + total + ")",
+          zipReady: "ZIP ready and download started!",
+          phoneModalTitle: "Selected Photos",
+          phoneModalDesc: "On iPhone, open a photo and tap Share → Save Image to save directly into your Photos app.",
+          openPhoto: "Open Photo",
+          doneBtn: "Done"
         }
       };
+
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
       let lang = "ar";
       let allPhotos = [];
@@ -844,6 +896,7 @@
       let isFiltered = false;
       let aiReady = false;
       let aiLoadingPromise = null;
+      let jszipPromise = null;
       let selectedFile = null;
       let previewObjectUrl = null;
 
@@ -852,6 +905,14 @@
       function t(key, ...args) {
         const val = I18N[lang][key];
         return typeof val === "function" ? val(...args) : val;
+      }
+
+      function getDownloadUrl(photo) {
+        return "https://drive.google.com/uc?export=download&id=" + photo.id;
+      }
+
+      function getViewUrl(photo) {
+        return "https://drive.google.com/file/d/" + photo.id + "/view";
       }
 
       function clearSelfieMemory() {
@@ -891,14 +952,15 @@
         $("selectAllVisibleBtn").style.display = (multiSelectMode && hasPhotos) ? "inline-flex" : "none";
 
         const floatBar = $("floatingDownloadBar");
+        const batchLabel = isIOS ? t("downloadPhoneBatch") : t("downloadZip");
         if (multiSelectMode && selCount > 0) {
           floatBar.classList.add("visible");
           $("floatingLabelText").textContent = t("floatingSelected", selCount);
-          $("floatingDownloadBtnText").textContent = t("downloadSelected");
+          $("floatingDownloadBtnText").textContent = batchLabel;
         } else if (isFiltered && hasPhotos) {
           floatBar.classList.add("visible");
           $("floatingLabelText").textContent = t("floatingMatchedAll", displayedPhotos.length);
-          $("floatingDownloadBtnText").textContent = t("downloadAll");
+          $("floatingDownloadBtnText").textContent = batchLabel;
         } else {
           floatBar.classList.remove("visible");
         }
@@ -929,6 +991,10 @@
         $("cancelModalBtn").textContent = t("cancel");
         $("runSearchBtn").textContent = t("search");
 
+        $("phoneModalTitle").textContent = t("phoneModalTitle");
+        $("phoneModalDesc").textContent = t("phoneModalDesc");
+        $("donePhoneModalBtn").textContent = t("doneBtn");
+
         syncToolbarAndFloating();
 
         if (allPhotos.length > 0) {
@@ -955,8 +1021,8 @@
         grid.innerHTML = list.map((photo) => {
           const isSel = selectedIds.has(photo.id);
           const previewUrl = "https://drive.google.com/thumbnail?id=" + photo.id + "&sz=w800";
-          const downloadUrl = "https://drive.google.com/uc?export=download&id=" + photo.id;
-          const viewUrl = "https://drive.google.com/file/d/" + photo.id + "/view";
+          const downloadUrl = getDownloadUrl(photo);
+          const viewUrl = getViewUrl(photo);
           return (
             '<article class="card ' + (isSel ? "selected" : "") + '" data-id="' + photo.id + '">' +
               '<div class="card-media">' +
@@ -966,8 +1032,8 @@
               '<div class="card-body">' +
                 '<div class="card-name" title="' + (photo.name || "") + '">' + (photo.name || photo.id) + "</div>" +
                 '<div class="card-actions">' +
-                  '<a class="card-dl" href="' + downloadUrl + '" target="_blank" rel="noopener">' + t("downloadOne") + "</a>" +
-                  '<a class="card-view" href="' + viewUrl + '" target="_blank" rel="noopener">' + t("openDrive") + "</a>" +
+                  '<a class="card-dl" href="' + downloadUrl + '" target="_blank" rel="noopener noreferrer">' + t("downloadOne") + "</a>" +
+                  '<a class="card-view" href="' + viewUrl + '" target="_blank" rel="noopener noreferrer">' + t("openDrive") + "</a>" +
                 "</div>" +
               "</div>" +
             "</article>"
@@ -984,6 +1050,25 @@
           s.onerror = () => reject(new Error("Failed to load " + src));
           document.head.appendChild(s);
         });
+      }
+
+      async function ensureJsZipLoaded() {
+        if (window.JSZip) return window.JSZip;
+        if (!jszipPromise) {
+          jszipPromise = (async () => {
+            for (const url of JSZIP_URLS) {
+              try {
+                await loadScript(url);
+                if (window.JSZip) return window.JSZip;
+              } catch (_) {}
+            }
+            throw new Error("Could not load JSZip");
+          })().catch((err) => {
+            jszipPromise = null;
+            throw err;
+          });
+        }
+        return jszipPromise;
       }
 
       async function ensureFaceApiLoaded() {
@@ -1044,19 +1129,89 @@
         return best;
       }
 
-      function triggerBatchDownload(list) {
+      function openPhoneDownloadSheet(list) {
+        const container = $("phoneDownloadList");
+        container.innerHTML = list.map((photo, idx) => {
+          const label = photo.name || ("photo-" + (idx + 1) + ".jpg");
+          const url = getDownloadUrl(photo);
+          return (
+            '<div class="phone-row">' +
+              '<span title="' + label + '">' + label + "</span>" +
+              '<a class="card-dl" style="min-height:36px; padding:0 12px;" href="' + url + '" target="_blank" rel="noopener noreferrer">' + t("openPhoto") + "</a>" +
+            "</div>"
+          );
+        }).join("");
+        $("phoneDownloadModal").classList.add("open");
+      }
+
+      async function downloadAsZip(list) {
+        const btn = $("floatingDownloadBtn");
+        btn.disabled = true;
+        try {
+          const JSZipLib = await ensureJsZipLoaded();
+          const zip = new JSZipLib();
+          let added = 0;
+
+          for (let i = 0; i < list.length; i++) {
+            const photo = list[i];
+            $("statusText").textContent = t("buildingZip", i + 1, list.length);
+            const candidates = [
+              "https://drive.google.com/uc?export=download&id=" + photo.id,
+              "https://drive.google.com/thumbnail?id=" + photo.id + "&sz=w1600"
+            ];
+            let fetchedBlob = null;
+            for (const u of candidates) {
+              try {
+                const resp = await fetch(u, { mode: "cors" });
+                if (resp.ok) {
+                  const blob = await resp.blob();
+                  if (blob && blob.size > 0 && blob.type.startsWith("image/")) {
+                    fetchedBlob = blob;
+                    break;
+                  }
+                }
+              } catch (_) {}
+            }
+
+            if (fetchedBlob) {
+              const ext = fetchedBlob.type.includes("png") ? "png" : "jpg";
+              const safeName = photo.name && /\.(jpe?g|png|webp)$/i.test(photo.name)
+                ? photo.name
+                : (photo.name ? photo.name + "." + ext : photo.id + "." + ext);
+              zip.file(safeName, fetchedBlob);
+              added++;
+            }
+          }
+
+          if (added === 0) {
+            openPhoneDownloadSheet(list);
+            return;
+          }
+
+          const zipBlob = await zip.generateAsync({ type: "blob" });
+          const zipUrl = URL.createObjectURL(zipBlob);
+          const a = document.createElement("a");
+          a.href = zipUrl;
+          a.download = isFiltered ? "my-wedding-photos.zip" : "selected-wedding-photos.zip";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(zipUrl), 15000);
+          $("statusText").textContent = t("zipReady");
+        } catch (_) {
+          openPhoneDownloadSheet(list);
+        } finally {
+          btn.disabled = false;
+        }
+      }
+
+      function handleBatchAction(list) {
         if (!list || !list.length) return;
-        $("statusText").textContent = t("batchNotice", list.length);
-        list.forEach((photo, idx) => {
-          setTimeout(() => {
-            const url = "https://drive.google.com/uc?export=download&id=" + photo.id;
-            const frame = document.createElement("iframe");
-            frame.style.display = "none";
-            frame.src = url;
-            document.body.appendChild(frame);
-            setTimeout(() => frame.remove(), 12000);
-          }, idx * 550);
-        });
+        if (isIOS) {
+          openPhoneDownloadSheet(list);
+        } else {
+          downloadAsZip(list);
+        }
       }
 
       function handleFileSelection(file) {
@@ -1127,10 +1282,16 @@
 
       $("floatingDownloadBtn").addEventListener("click", () => {
         if (multiSelectMode && selectedIds.size > 0) {
-          triggerBatchDownload(allPhotos.filter((p) => selectedIds.has(p.id)));
+          handleBatchAction(allPhotos.filter((p) => selectedIds.has(p.id)));
         } else if (isFiltered && displayedPhotos.length > 0) {
-          triggerBatchDownload(displayedPhotos);
+          handleBatchAction(displayedPhotos);
         }
+      });
+
+      $("closePhoneModalBtn").addEventListener("click", () => $("phoneDownloadModal").classList.remove("open"));
+      $("donePhoneModalBtn").addEventListener("click", () => $("phoneDownloadModal").classList.remove("open"));
+      $("phoneDownloadModal").addEventListener("click", (e) => {
+        if (e.target === $("phoneDownloadModal")) $("phoneDownloadModal").classList.remove("open");
       });
 
       $("openSearchBtnDesktop").addEventListener("click", openSearchModal);
