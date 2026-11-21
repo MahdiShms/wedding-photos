@@ -11,19 +11,19 @@
     :root {
       --bg: #f6f4f0;
       --surface: #ffffff;
-      --surface-2: #f1eee8;
+      --surface-2: #efece6;
       --text: #181615;
       --muted: #66615b;
       --accent: #181615;
-      --accent-hover: #2e2a27;
+      --accent-hover: #2f2b28;
       --accent-text: #ffffff;
-      --border: #e5e0d8;
+      --border: #e4dfd7;
       --radius-lg: 20px;
       --radius-md: 14px;
       --radius-sm: 10px;
-      --shadow: 0 8px 28px rgba(24, 22, 21, 0.05);
-      --card-min: 220px;
-      --img-h: 230px;
+      --shadow: 0 8px 24px rgba(24, 22, 21, 0.05);
+      --card-min: 225px;
+      --img-h: 235px;
     }
 
     * {
@@ -31,16 +31,12 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
     body {
       margin: 0;
       font-family: "Cairo", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.5;
+      line-height: 1.45;
       overflow-x: hidden;
     }
 
@@ -49,87 +45,92 @@
     }
 
     .app-shell {
-      max-width: 1240px;
+      max-width: 1260px;
       margin: 0 auto;
-      padding: 16px 14px calc(88px + env(safe-area-inset-bottom));
+      padding: 14px 14px calc(92px + env(safe-area-inset-bottom));
     }
 
-    /* Sticky Glass Header */
+    /* Header: Left controls in fixed LTR row, Title centered, Right spacer balances width */
     header.topbar {
       position: sticky;
       top: 10px;
       z-index: 40;
       display: grid;
-      grid-template-columns: 1fr auto;
+      grid-template-columns: minmax(215px, auto) 1fr minmax(215px, auto);
       align-items: center;
-      gap: 12px;
-      background: rgba(255, 255, 255, 0.9);
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.92);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      padding: 14px 18px;
+      padding: 12px 16px;
       box-shadow: var(--shadow);
     }
 
-    .brand {
+    /* Keep left-side controls anchored on the physical left even in RTL */
+    .header-left {
+      direction: ltr;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      justify-self: start;
+    }
+
+    .lang-slot {
+      width: 78px;
+      flex-shrink: 0;
+    }
+
+    .search-slot {
+      width: 142px;
+      flex-shrink: 0;
+    }
+
+    .header-center {
+      text-align: center;
       min-width: 0;
     }
 
-    .brand h1 {
+    .header-center h1 {
       margin: 0;
-      font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+      font-size: clamp(1.1rem, 2.2vw, 1.45rem);
       font-weight: 700;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .brand p {
+    .header-center p {
       margin: 2px 0 0;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: var(--muted);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    /* Fixed slot layout prevents jumping when switching RTL/LTR */
-    .header-slots {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-
-    .slot-search {
-      min-width: 138px;
-      display: flex;
-      justify-content: center;
-    }
-
-    .slot-lang {
-      width: 84px;
-      display: flex;
-      justify-content: center;
+    .header-right-spacer {
+      justify-self: end;
+      min-width: 1px;
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 7px;
-      height: 42px;
-      padding: 0 16px;
+      gap: 6px;
+      height: 40px;
+      padding: 0 14px;
       border-radius: 999px;
       border: 1px solid var(--border);
       background: var(--surface);
       color: var(--text);
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 0.86rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
+      transition: background-color 0.14s ease, border-color 0.14s ease, transform 0.1s ease;
       text-decoration: none;
       white-space: nowrap;
     }
@@ -147,7 +148,6 @@
       background: var(--accent);
       color: var(--accent-text);
       border-color: var(--accent);
-      width: 100%;
     }
 
     .btn-primary:hover:not(:disabled) {
@@ -155,69 +155,41 @@
       border-color: var(--accent-hover);
     }
 
-    .lang-btn {
-      width: 100%;
-      padding: 0 10px;
-      font-size: 0.84rem;
-    }
-
     .btn:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
 
-    /* Fixed-geometry toolbar so state changes never shift controls */
+    .lang-btn {
+      width: 100%;
+      padding: 0 8px;
+      font-size: 0.82rem;
+    }
+
+    .search-btn {
+      width: 100%;
+      padding: 0 12px;
+      font-size: 0.84rem;
+    }
+
+    /* Toolbar: Grid size locked on physical left, actions & status on right */
     .toolbar {
+      direction: ltr;
       display: grid;
-      grid-template-columns: 1fr auto;
+      grid-template-columns: auto 1fr;
       align-items: center;
       gap: 12px;
-      margin-top: 14px;
+      margin-top: 12px;
       padding: 10px 14px;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
-      min-height: 58px;
-    }
-
-    .toolbar-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
-
-    .badge-text {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--text);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* Reserved container prevents layout jump when Show All / Download All appear */
-    .result-actions-slot {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 36px;
-    }
-
-    .result-actions-slot.hidden-slot {
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    .pill-btn {
-      height: 36px;
-      padding: 0 14px;
-      font-size: 0.84rem;
+      min-height: 56px;
     }
 
     .size-group {
       display: inline-grid;
-      grid-template-columns: repeat(3, 64px);
+      grid-template-columns: repeat(3, 66px);
       background: var(--surface-2);
       padding: 3px;
       border-radius: 999px;
@@ -235,7 +207,6 @@
       height: 30px;
       border-radius: 999px;
       cursor: pointer;
-      transition: background-color 0.15s ease, color 0.15s ease;
     }
 
     .size-btn.active {
@@ -243,38 +214,65 @@
       color: var(--accent-text);
     }
 
+    .toolbar-right {
+      direction: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .badge-pill {
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--surface-2);
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .pill-btn {
+      height: 34px;
+      padding: 0 12px;
+      font-size: 0.82rem;
+    }
+
     .status-line {
       margin-top: 10px;
       padding-inline: 6px;
-      font-size: 0.86rem;
+      font-size: 0.85rem;
       color: var(--muted);
-      min-height: 22px;
+      min-height: 20px;
     }
 
-    /* Display Size Presets */
+    /* Display sizes */
     body.size-small {
-      --card-min: 150px;
-      --img-h: 155px;
+      --card-min: 155px;
+      --img-h: 165px;
     }
 
     body.size-medium {
-      --card-min: 220px;
-      --img-h: 230px;
+      --card-min: 225px;
+      --img-h: 235px;
     }
 
     body.size-large {
-      --card-min: 320px;
-      --img-h: 320px;
+      --card-min: 325px;
+      --img-h: 330px;
     }
 
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(var(--card-min), 1fr));
       gap: 14px;
-      margin-top: 12px;
+      margin-top: 10px;
     }
 
     .card {
+      position: relative;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-md);
@@ -282,24 +280,57 @@
       box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
-      transition: transform 0.16s ease, box-shadow 0.16s ease;
+      transition: border-color 0.15s ease, transform 0.15s ease;
     }
 
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 30px rgba(24, 22, 21, 0.08);
+    .card.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent);
     }
 
-    .card img {
+    .card-media {
+      position: relative;
       width: 100%;
       height: var(--img-h);
-      object-fit: cover;
-      display: block;
       background: var(--surface-2);
+      overflow: hidden;
+    }
+
+    /* Focus upper half so faces are clearly framed */
+    .card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 18%;
+      display: block;
+    }
+
+    .select-check {
+      position: absolute;
+      top: 8px;
+      inset-inline-start: 8px;
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      background: rgba(24, 22, 21, 0.55);
+      backdrop-filter: blur(6px);
+      color: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .card.selected .select-check {
+      background: var(--accent);
+      border-color: var(--accent);
     }
 
     .card-body {
-      padding: 10px 12px 12px;
+      padding: 10px;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -308,7 +339,7 @@
     }
 
     .card-name {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--muted);
       white-space: nowrap;
       overflow: hidden;
@@ -318,20 +349,20 @@
     .card-actions {
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 8px;
+      gap: 6px;
     }
 
     .card-dl {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      height: 36px;
-      padding: 0 12px;
+      height: 34px;
+      padding: 0 10px;
       border-radius: var(--radius-sm);
       background: var(--accent);
       color: var(--accent-text);
       text-decoration: none;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 600;
     }
 
@@ -343,13 +374,13 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      height: 36px;
-      padding: 0 10px;
+      height: 34px;
+      padding: 0 9px;
       border-radius: var(--radius-sm);
       background: var(--surface-2);
       color: var(--text);
       text-decoration: none;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 600;
       border: 1px solid var(--border);
     }
@@ -360,20 +391,20 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
-      margin-top: 14px;
+      margin-top: 12px;
       color: var(--muted);
     }
 
-    /* Mobile Bottom Action Bar */
+    /* Mobile bottom bar */
     .mobile-dock {
       display: none;
     }
 
-    /* Modal / Bottom Sheet on Mobile */
+    /* Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(18, 16, 15, 0.56);
+      background: rgba(18, 16, 15, 0.58);
       backdrop-filter: blur(4px);
       display: none;
       align-items: center;
@@ -393,13 +424,13 @@
       border: 1px solid var(--border);
       border-radius: 22px;
       padding: 22px;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
       position: relative;
     }
 
     .modal h2 {
       margin: 0 0 6px;
-      font-size: 1.2rem;
+      font-size: 1.18rem;
       padding-inline-end: 36px;
     }
 
@@ -421,9 +452,6 @@
       color: var(--text);
       font-size: 1.15rem;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .choice-grid {
@@ -470,10 +498,11 @@
     }
 
     .preview-box img {
-      width: 112px;
-      height: 112px;
+      width: 110px;
+      height: 110px;
       border-radius: 50%;
       object-fit: cover;
+      object-position: center 18%;
       border: 3px solid var(--border);
       margin-bottom: 6px;
     }
@@ -487,538 +516,4 @@
 
     .modal-footer {
       display: grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 10px;
-    }
-
-    input[type="file"] {
-      display: none;
-    }
-
-    /* Responsive Breakpoints */
-    @media (max-width: 720px) {
-      .brand p {
-        display: none;
-      }
-
-      .slot-search {
-        display: none;
-      }
-
-      .toolbar {
-        grid-template-columns: 1fr;
-        gap: 10px;
-        padding: 10px 12px;
-      }
-
-      .toolbar-left {
-        justify-content: space-between;
-        flex-wrap: wrap;
-      }
-
-      .size-group {
-        width: 100%;
-        grid-template-columns: repeat(3, 1fr);
-      }
-
-      .size-btn {
-        width: 100%;
-      }
-
-      body.size-small {
-        --card-min: 105px;
-        --img-h: 118px;
-      }
-
-      body.size-medium {
-        --card-min: 155px;
-        --img-h: 165px;
-      }
-
-      body.size-large {
-        --card-min: 280px;
-        --img-h: 270px;
-      }
-
-      .grid {
-        gap: 10px;
-      }
-
-      .mobile-dock {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        z-index: 45;
-        display: flex;
-        gap: 10px;
-        padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
-        background: rgba(255, 255, 255, 0.94);
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
-        border-top: 1px solid var(--border);
-      }
-
-      .mobile-dock .btn-primary {
-        height: 46px;
-        font-size: 0.96rem;
-      }
-
-      .modal-backdrop.open {
-        align-items: flex-end;
-        padding: 0;
-      }
-
-      .modal {
-        max-width: 100%;
-        border-radius: 24px 24px 0 0;
-        padding: 20px 18px calc(20px + env(safe-area-inset-bottom));
-      }
-    }
-  </style>
-</head>
-<body class="size-medium">
-  <div class="app-shell">
-    <header class="topbar">
-      <div class="brand">
-        <h1 id="titleText">معرض صور الزفاف</h1>
-        <p id="subtitleText">تصفح جميع الصور أو ابحث عن صورك عبر صورة شخصية</p>
-      </div>
-
-      <div class="header-slots">
-        <div class="slot-search">
-          <button class="btn btn-primary" id="openSearchBtnDesktop" disabled>
-            <span id="findBtnTextDesktop">ابحث عن صورك</span>
-          </button>
-        </div>
-        <div class="slot-lang">
-          <button class="btn lang-btn" id="langToggleBtn" type="button">English</button>
-        </div>
-      </div>
-    </header>
-
-    <div class="toolbar">
-      <div class="toolbar-left">
-        <span class="badge-text" id="viewBadgeText">عرض جميع الصور</span>
-        <div class="result-actions-slot hidden-slot" id="resultActionsSlot">
-          <button class="btn pill-btn" id="resetFilterBtn" type="button">
-            <span id="showAllText">عرض الكل</span>
-          </button>
-          <button class="btn pill-btn btn-primary" id="downloadAllBtn" type="button" style="width:auto;">
-            <span id="downloadAllText">تحميل الكل</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="size-group" role="group" aria-label="Display size">
-        <button class="size-btn" type="button" data-size="small" id="sizeSmallBtn">صغير</button>
-        <button class="size-btn active" type="button" data-size="medium" id="sizeMediumBtn">متوسط</button>
-        <button class="size-btn" type="button" data-size="large" id="sizeLargeBtn">كبير</button>
-      </div>
-    </div>
-
-    <div class="status-line" id="statusText">جاري تحميل الألبوم...</div>
-    <div class="grid" id="photoGrid"></div>
-    <div class="empty-state" id="emptyState" style="display:none;"></div>
-  </div>
-
-  <div class="mobile-dock">
-    <button class="btn btn-primary" id="openSearchBtnMobile" type="button" disabled>
-      <span id="findBtnTextMobile">ابحث عن صورك</span>
-    </button>
-  </div>
-
-  <!-- Selfie / Upload Modal -->
-  <div class="modal-backdrop" id="searchModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal">
-      <button class="modal-close" id="closeModalBtn" type="button" aria-label="Close">×</button>
-      <h2 id="modalTitle">ابحث عن صورك</h2>
-      <p id="modalDesc">اختر التقاط سيلفي بالكاميرا أو رفع صورة واضحة لوجهك، ثم اضغط بحث.</p>
-
-      <div class="choice-grid">
-        <label class="choice-card" for="cameraInput">
-          <strong id="cameraChoiceTitle">التقاط سيلفي</strong>
-          <span id="cameraChoiceSub">فتح الكاميرا الأمامية</span>
-          <input type="file" id="cameraInput" accept="image/*" capture="user" />
-        </label>
-        <label class="choice-card" for="galleryInput">
-          <strong id="uploadChoiceTitle">رفع صورة</strong>
-          <span id="uploadChoiceSub">اختيار صورة من الجهاز</span>
-          <input type="file" id="galleryInput" accept="image/*" />
-        </label>
-      </div>
-
-      <div class="preview-box" id="previewBox">
-        <img id="selfiePreview" alt="Selected face" />
-        <div id="selectedFileName" style="font-size:0.82rem; color:var(--muted);"></div>
-      </div>
-
-      <div class="modal-status" id="modalStatus"></div>
-
-      <div class="modal-footer">
-        <button class="btn" id="cancelModalBtn" type="button">إلغاء</button>
-        <button class="btn btn-primary" id="runSearchBtn" type="button" disabled>بحث</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const SCRIPT_URLS = [
-      "https://unpkg.com/@vladmandic/face-api/dist/face-api.js",
-      "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"
-    ];
-    const MODEL_URLS = [
-      "https://unpkg.com/@vladmandic/face-api/model",
-      "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model"
-    ];
-    const THRESHOLD = 0.50;
-
-    const I18N = {
-      ar: {
-        title: "معرض صور الزفاف",
-        subtitle: "تصفح جميع الصور أو ابحث عن صورك عبر صورة شخصية",
-        findBtn: "ابحث عن صورك",
-        downloadAll: "تحميل الكل",
-        langBtn: "English",
-        viewAll: "عرض جميع الصور",
-        viewMatched: "صورك المطابقة",
-        showAll: "عرض الكل",
-        sizeSmall: "صغير",
-        sizeMedium: "متوسط",
-        sizeLarge: "كبير",
-        downloadOne: "تحميل",
-        openDrive: "Drive",
-        loadingAlbum: "جاري تحميل الألبوم...",
-        loadingAi: "جاري تحميل محرك البحث بالوجه...",
-        readyAll: (n) => `جاهز — إجمالي الصور في الألبوم: ${n}`,
-        readyFiltered: (n) => `تم العثور على ${n} صورة خاصة بك`,
-        noMatches: "لم يتم العثور على صور مطابقة. جرّب صورة أوضح للوجه من الأمام.",
-        emptyAlbum: "لا توجد صور في الألبوم حالياً.",
-        modalTitle: "ابحث عن صورك",
-        modalDesc: "اختر التقاط سيلفي بالكاميرا أو رفع صورة واضحة لوجهك، ثم اضغط بحث.",
-        cameraTitle: "التقاط سيلفي",
-        cameraSub: "فتح الكاميرا الأمامية",
-        uploadTitle: "رفع صورة",
-        uploadSub: "اختيار صورة من الجهاز",
-        cancel: "إلغاء",
-        search: "بحث",
-        scanning: "جاري تحليل الوجه والبحث في الألبوم...",
-        noFace: "لم يتم التعرف على وجه بوضوح. يرجى اختيار صورة أوضح بإضاءة جيدة.",
-        batchNotice: (n) => `جاري بدء تنزيل ${n} صور. إذا طلب المتصفح السماح بتنزيل عدة ملفات، اضغط «سماح» (Allow).`
-      },
-      en: {
-        title: "Wedding Gallery",
-        subtitle: "Browse every photo or find yours using a selfie or photo",
-        findBtn: "Find My Photos",
-        downloadAll: "Download All",
-        langBtn: "العربية",
-        viewAll: "All Photos",
-        viewMatched: "Your Matched Photos",
-        showAll: "Show All",
-        sizeSmall: "Small",
-        sizeMedium: "Medium",
-        sizeLarge: "Large",
-        downloadOne: "Download",
-        openDrive: "Drive",
-        loadingAlbum: "Loading album...",
-        loadingAi: "Loading face-search engine...",
-        readyAll: (n) => `Ready — Total photos in album: ${n}`,
-        readyFiltered: (n) => `Found ${n} photo(s) of you`,
-        noMatches: "No matching photos found. Try a clearer, front-facing photo in good light.",
-        emptyAlbum: "No photos in the album yet.",
-        modalTitle: "Find My Photos",
-        modalDesc: "Take a selfie with your camera or upload a clear photo of your face, then tap Search.",
-        cameraTitle: "Take Selfie",
-        cameraSub: "Open front camera",
-        uploadTitle: "Upload Photo",
-        uploadSub: "Choose from device",
-        cancel: "Cancel",
-        search: "Search",
-        scanning: "Scanning face and searching album...",
-        noFace: "Couldn't clearly detect a face. Please pick a clearer photo in good lighting.",
-        batchNotice: (n) => `Starting download for ${n} photos. If your browser asks to allow multiple downloads, click Allow.`
-      }
-    };
-
-    let lang = "ar";
-    let allPhotos = [];
-    let displayedPhotos = [];
-    let isFiltered = false;
-    let aiReady = false;
-    let selectedFile = null;
-
-    const $ = (id) => document.getElementById(id);
-
-    function t(key, ...args) {
-      const val = I18N[lang][key];
-      return typeof val === "function" ? val(...args) : val;
-    }
-
-    function syncResultActionSlot() {
-      const slot = $("resultActionsSlot");
-      const dlAllBtn = $("downloadAllBtn");
-      if (!isFiltered) {
-        slot.classList.add("hidden-slot");
-        dlAllBtn.disabled = true;
-      } else {
-        slot.classList.remove("hidden-slot");
-        dlAllBtn.disabled = displayedPhotos.length === 0;
-      }
-    }
-
-    function applyLanguage(newLang) {
-      lang = newLang;
-      document.documentElement.lang = lang;
-      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-
-      $("titleText").textContent = t("title");
-      $("subtitleText").textContent = t("subtitle");
-      $("findBtnTextDesktop").textContent = t("findBtn");
-      $("findBtnTextMobile").textContent = t("findBtn");
-      $("downloadAllText").textContent = t("downloadAll");
-      $("langToggleBtn").textContent = t("langBtn");
-      $("showAllText").textContent = t("showAll");
-      $("sizeSmallBtn").textContent = t("sizeSmall");
-      $("sizeMediumBtn").textContent = t("sizeMedium");
-      $("sizeLargeBtn").textContent = t("sizeLarge");
-
-      $("modalTitle").textContent = t("modalTitle");
-      $("modalDesc").textContent = t("modalDesc");
-      $("cameraChoiceTitle").textContent = t("cameraTitle");
-      $("cameraChoiceSub").textContent = t("cameraSub");
-      $("uploadChoiceTitle").textContent = t("uploadTitle");
-      $("uploadChoiceSub").textContent = t("uploadSub");
-      $("cancelModalBtn").textContent = t("cancel");
-      $("runSearchBtn").textContent = t("search");
-
-      $("viewBadgeText").textContent = isFiltered ? t("viewMatched") : t("viewAll");
-      syncResultActionSlot();
-
-      if (allPhotos.length > 0) {
-        $("statusText").textContent = isFiltered
-          ? t("readyFiltered", displayedPhotos.length)
-          : t("readyAll", allPhotos.length);
-      }
-
-      renderGrid(displayedPhotos);
-    }
-
-    function renderGrid(list) {
-      const grid = $("photoGrid");
-      const empty = $("emptyState");
-
-      if (!list || list.length === 0) {
-        grid.innerHTML = "";
-        empty.style.display = "block";
-        empty.textContent = isFiltered ? t("noMatches") : t("emptyAlbum");
-        return;
-      }
-
-      empty.style.display = "none";
-      grid.innerHTML = list.map((photo) => {
-        const previewUrl = `https://drive.google.com/thumbnail?id=${photo.id}&sz=w800`;
-        const downloadUrl = `https://drive.google.com/uc?export=download&id=${photo.id}`;
-        const viewUrl = `https://drive.google.com/file/d/${photo.id}/view`;
-        return `
-          <article class="card">
-            <img src="${previewUrl}" loading="lazy" alt="${photo.name || "Wedding photo"}" />
-            <div class="card-body">
-              <div class="card-name" title="${photo.name || ""}">${photo.name || photo.id}</div>
-              <div class="card-actions">
-                <a class="card-dl" href="${downloadUrl}" target="_blank" rel="noopener">${t("downloadOne")}</a>
-                <a class="card-view" href="${viewUrl}" target="_blank" rel="noopener">${t("openDrive")}</a>
-              </div>
-            </div>
-          </article>
-        `;
-      }).join("");
-    }
-
-    function loadScript(src) {
-      return new Promise((resolve, reject) => {
-        const s = document.createElement("script");
-        s.src = src;
-        s.async = true;
-        s.onload = () => resolve();
-        s.onerror = () => reject(new Error("Failed to load " + src));
-        document.head.appendChild(s);
-      });
-    }
-
-    async function ensureFaceApiLoaded() {
-      if (window.faceapi) return;
-      for (const url of SCRIPT_URLS) {
-        try {
-          await loadScript(url);
-          if (window.faceapi) return;
-        } catch (_) {}
-      }
-      throw new Error("Could not load face-api script");
-    }
-
-    async function loadModelsWithFallback() {
-      for (const modelUrl of MODEL_URLS) {
-        try {
-          await Promise.all([
-            faceapi.nets.ssdMobilenetv1.loadFromUri(modelUrl),
-            faceapi.nets.faceLandmark68Net.loadFromUri(modelUrl),
-            faceapi.nets.faceRecognitionNet.loadFromUri(modelUrl)
-          ]);
-          return;
-        } catch (_) {}
-      }
-      throw new Error("Could not load AI models");
-    }
-
-    function euclideanDistance(a, b) {
-      return Math.sqrt(a.reduce((sum, val, i) => sum + Math.pow(val - b[i], 2), 0));
-    }
-
-    function bestDistanceForPhoto(guestVector, faceVecs) {
-      if (!Array.isArray(faceVecs) || faceVecs.length === 0) return Infinity;
-      let best = Infinity;
-      for (const vec of faceVecs) {
-        const d = euclideanDistance(guestVector, vec);
-        if (d < best) best = d;
-      }
-      return best;
-    }
-
-    function handleFileSelection(file) {
-      if (!file) return;
-      selectedFile = file;
-      $("modalStatus").textContent = "";
-      $("previewBox").classList.add("has-img");
-      $("selfiePreview").src = URL.createObjectURL(file);
-      $("selectedFileName").textContent = file.name || "selfie.jpg";
-      if (aiReady) {
-        $("runSearchBtn").disabled = false;
-      }
-    }
-
-    function openSearchModal() {
-      $("modalStatus").textContent = "";
-      $("searchModal").classList.add("open");
-    }
-
-    function closeSearchModal() {
-      $("searchModal").classList.remove("open");
-    }
-
-    $("langToggleBtn").addEventListener("click", () => {
-      applyLanguage(lang === "ar" ? "en" : "ar");
-    });
-
-    document.querySelectorAll(".size-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".size-btn").forEach((b) => b.classList.remove("active"));
-        btn.classList.add("active");
-        document.body.classList.remove("size-small", "size-medium", "size-large");
-        document.body.classList.add(`size-${btn.dataset.size}`);
-      });
-    });
-
-    $("openSearchBtnDesktop").addEventListener("click", openSearchModal);
-    $("openSearchBtnMobile").addEventListener("click", openSearchModal);
-    $("closeModalBtn").addEventListener("click", closeSearchModal);
-    $("cancelModalBtn").addEventListener("click", closeSearchModal);
-    $("searchModal").addEventListener("click", (e) => {
-      if (e.target === $("searchModal")) closeSearchModal();
-    });
-
-    $("cameraInput").addEventListener("change", (e) => handleFileSelection(e.target.files[0]));
-    $("galleryInput").addEventListener("change", (e) => handleFileSelection(e.target.files[0]));
-
-    $("runSearchBtn").addEventListener("click", async () => {
-      if (!selectedFile || !aiReady) return;
-      $("runSearchBtn").disabled = true;
-      $("modalStatus").textContent = t("scanning");
-
-      try {
-        const img = await faceapi.bufferToImage(selectedFile);
-        const detection = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
-
-        if (!detection) {
-          $("modalStatus").textContent = t("noFace");
-          $("runSearchBtn").disabled = false;
-          return;
-        }
-
-        const guestVector = Array.from(detection.descriptor);
-        const matched = allPhotos
-          .map((photo) => ({ ...photo, dist: bestDistanceForPhoto(guestVector, photo.faces) }))
-          .filter((item) => item.dist < THRESHOLD)
-          .sort((a, b) => a.dist - b.dist);
-
-        isFiltered = true;
-        displayedPhotos = matched;
-        $("viewBadgeText").textContent = t("viewMatched");
-        syncResultActionSlot();
-        $("statusText").textContent = matched.length > 0
-          ? t("readyFiltered", matched.length)
-          : t("noMatches");
-
-        renderGrid(displayedPhotos);
-        closeSearchModal();
-      } catch (err) {
-        $("modalStatus").textContent = err.message || "Error scanning photo";
-      } finally {
-        $("runSearchBtn").disabled = false;
-      }
-    });
-
-    $("resetFilterBtn").addEventListener("click", () => {
-      isFiltered = false;
-      displayedPhotos = [...allPhotos];
-      $("viewBadgeText").textContent = t("viewAll");
-      syncResultActionSlot();
-      $("statusText").textContent = t("readyAll", allPhotos.length);
-      renderGrid(displayedPhotos);
-    });
-
-    $("downloadAllBtn").addEventListener("click", () => {
-      if (!isFiltered || !displayedPhotos.length) return;
-      $("statusText").textContent = t("batchNotice", displayedPhotos.length);
-      displayedPhotos.forEach((photo, idx) => {
-        setTimeout(() => {
-          const a = document.createElement("a");
-          a.href = `https://drive.google.com/uc?export=download&id=${photo.id}`;
-          a.download = photo.name || `${photo.id}.jpg`;
-          a.target = "_blank";
-          a.rel = "noopener";
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-        }, idx * 250);
-      });
-    });
-
-    async function init() {
-      applyLanguage("ar");
-      syncResultActionSlot();
-      $("statusText").textContent = t("loadingAlbum");
-
-      try {
-        const res = await fetch("faces.json?v=" + Date.now());
-        const data = await res.json();
-        allPhotos = Array.isArray(data) ? data : (data.photos || []);
-        displayedPhotos = [...allPhotos];
-        renderGrid(displayedPhotos);
-
-        $("statusText").textContent = `${t("readyAll", allPhotos.length)} — ${t("loadingAi")}`;
-
-        await ensureFaceApiLoaded();
-        await loadModelsWithFallback();
-        aiReady = true;
-        $("openSearchBtnDesktop").disabled = false;
-        $("openSearchBtnMobile").disabled = false;
-        $("statusText").textContent = t("readyAll", allPhotos.length);
-      } catch (err) {
-        $("statusText").textContent = `Error: ${err.message}`;
-      }
-    }
-
-    init();
-  </script>
-</body>
-</html>
+      grid-template-columns: 1fr 1.4fr
