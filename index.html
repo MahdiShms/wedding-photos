@@ -1,38 +1,434 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Find Your Wedding Photos</title>
+  <title>صور الزفاف | Wedding Photos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
-    body { font-family: system-ui, -apple-system, sans-serif; background: #faf9f6; color: #1f2937; margin: 0; padding: 24px 16px; text-align: center; }
-    .container { max-width: 820px; margin: 0 auto; }
-    h1 { font-size: 1.75rem; margin-bottom: 8px; }
-    p { color: #6b7280; margin-bottom: 24px; }
-    .btn { display: inline-block; background: #111827; color: #fff; padding: 14px 28px; border-radius: 999px; font-size: 1rem; font-weight: 600; cursor: pointer; border: none; }
-    .btn:disabled { background: #9ca3af; cursor: not-allowed; }
-    input[type="file"] { display: none; }
-    #status { margin-top: 16px; font-size: 0.95rem; color: #4b5563; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 28px; }
-    .card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.06); display: flex; flex-direction: column; }
-    .card img { width: 100%; height: 240px; object-fit: cover; }
-    .card .meta { padding: 8px 10px 0; font-size: 0.78rem; color: #6b7280; }
-    .card a { padding: 10px; margin-top: 6px; text-decoration: none; background: #f3f4f6; color: #111827; font-weight: 600; font-size: 0.9rem; }
-    .card a:hover { background: #e5e7eb; }
+    :root {
+      --bg: #f8f6f2;
+      --surface: #ffffff;
+      --text: #1c1917;
+      --muted: #6b655f;
+      --accent: #1c1917;
+      --accent-text: #ffffff;
+      --border: #e7e2da;
+      --shadow: 0 6px 24px rgba(28, 25, 23, 0.06);
+      --card-min: 230px;
+      --img-h: 240px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Cairo", "Plus Jakarta Sans", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    html[lang="en"] body {
+      font-family: "Plus Jakarta Sans", "Cairo", system-ui, sans-serif;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 18px 60px;
+    }
+
+    header.topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.45rem;
+      font-weight: 700;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.16s ease;
+      text-decoration: none;
+    }
+
+    .btn:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: #f3efe8;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--accent-text);
+      border-color: var(--accent);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #332e2a;
+      border-color: #332e2a;
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 20px;
+      padding: 12px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .filter-info {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .size-group {
+      display: inline-flex;
+      background: var(--bg);
+      padding: 4px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      gap: 4px;
+    }
+
+    .size-btn {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .size-btn.active {
+      background: var(--accent);
+      color: var(--accent-text);
+    }
+
+    .status-bar {
+      margin-top: 12px;
+      font-size: 0.88rem;
+      color: var(--muted);
+      padding-inline: 4px;
+    }
+
+    /* Grid sizes: small, medium, large */
+    body.size-small { --card-min: 155px; --img-h: 165px; }
+    body.size-medium { --card-min: 235px; --img-h: 240px; }
+    body.size-large { --card-min: 330px; --img-h: 330px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(var(--card-min), 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card img {
+      width: 100%;
+      height: var(--img-h);
+      object-fit: cover;
+      display: block;
+      background: #efece6;
+    }
+
+    .card-body {
+      padding: 10px 12px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    .card-name {
+      font-size: 0.82rem;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .card-link {
+      flex: 1;
+      text-align: center;
+      padding: 8px 10px;
+      border-radius: 9px;
+      background: #f3efe8;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 600;
+    }
+
+    .card-link:hover {
+      background: #e7e1d6;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-top: 18px;
+      color: var(--muted);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 17, 15, 0.58);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 100;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 440px;
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+      position: relative;
+    }
+
+    .modal h2 {
+      margin: 0 0 8px;
+      font-size: 1.25rem;
+    }
+
+    .modal p {
+      margin: 0 0 18px;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      inset-inline-end: 16px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    .choice-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .choice-card {
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 12px;
+      text-align: center;
+      cursor: pointer;
+      background: var(--bg);
+      transition: all 0.15s ease;
+    }
+
+    .choice-card:hover {
+      border-color: var(--accent);
+      background: #f2ede4;
+    }
+
+    .choice-card strong {
+      display: block;
+      font-size: 0.96rem;
+      margin-bottom: 4px;
+    }
+
+    .choice-card span {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .preview-box {
+      display: none;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .preview-box.has-img {
+      display: block;
+    }
+
+    .preview-box img {
+      width: 132px;
+      height: 132px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--border);
+      margin-bottom: 10px;
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
   </style>
 </head>
-<body>
+<body class="size-medium">
   <div class="container">
-    <h1>Find Your Wedding Photos</h1>
-    <p>Take a quick selfie or upload a clear photo of your face to view all your photos.</p>
+    <header class="topbar">
+      <div class="brand">
+        <h1 id="titleText">معرض صور الزفاف</h1>
+        <p id="subtitleText">تصفح جميع الصور أو ابحث عن صورك عبر صورة شخصية</p>
+      </div>
+      <div class="top-actions">
+        <button class="btn btn-primary" id="openSearchBtn" disabled>
+          <span id="findBtnText">ابحث عن صورك</span>
+        </button>
+        <button class="btn" id="downloadAllBtn" disabled>
+          <span id="downloadAllText">تحميل الكل</span>
+        </button>
+        <button class="btn" id="langToggleBtn">English</button>
+      </div>
+    </header>
 
-    <label class="btn" id="uploadLabel">
-      Take Selfie / Choose Photo
-      <input type="file" id="selfieInput" accept="image/*" capture="user" disabled />
-    </label>
+    <div class="toolbar">
+      <div class="filter-info">
+        <span id="viewBadgeText">عرض جميع الصور</span>
+        <button class="btn" id="resetFilterBtn" style="display:none; padding: 6px 12px; font-size: 0.84rem;">
+          <span id="showAllText">عرض الكل</span>
+        </button>
+      </div>
 
-    <div id="status">Loading AI library...</div>
-    <div class="grid" id="results"></div>
+      <div class="size-group" role="group" aria-label="Display size">
+        <button class="size-btn" data-size="small" id="sizeSmallBtn">صغير</button>
+        <button class="size-btn active" data-size="medium" id="sizeMediumBtn">متوسط</button>
+        <button class="size-btn" data-size="large" id="sizeLargeBtn">كبير</button>
+      </div>
+    </div>
+
+    <div class="status-bar" id="statusText">جاري تحميل الألبوم ونماذج الذكاء الاصطناعي...</div>
+    <div class="grid" id="photoGrid"></div>
+    <div class="empty-state" id="emptyState" style="display:none;"></div>
+  </div>
+
+  <!-- Selfie / Upload Modal -->
+  <div class="modal-backdrop" id="searchModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <button class="modal-close" id="closeModalBtn" aria-label="Close">×</button>
+      <h2 id="modalTitle">ابحث عن صورك</h2>
+      <p id="modalDesc">اختر التقاط سيلفي بالكاميرا أو رفع صورة واضحة لوجهك، ثم اضغط بحث.</p>
+
+      <div class="choice-grid">
+        <label class="choice-card" for="cameraInput">
+          <strong id="cameraChoiceTitle">التقاط سيلفي</strong>
+          <span id="cameraChoiceSub">فتح الكاميرا الأمامية</span>
+          <input type="file" id="cameraInput" accept="image/*" capture="user" />
+        </label>
+        <label class="choice-card" for="galleryInput">
+          <strong id="uploadChoiceTitle">رفع صورة</strong>
+          <span id="uploadChoiceSub">اختيار صورة من الجهاز</span>
+          <input type="file" id="galleryInput" accept="image/*" />
+        </label>
+      </div>
+
+      <div class="preview-box" id="previewBox">
+        <img id="selfiePreview" alt="Selected face" />
+        <div id="selectedFileName" style="font-size:0.84rem; color:var(--muted);"></div>
+      </div>
+
+      <div id="modalStatus" style="font-size:0.88rem; color:var(--muted); margin-bottom:14px;"></div>
+
+      <div class="modal-footer">
+        <button class="btn" id="cancelModalBtn">إلغاء</button>
+        <button class="btn btn-primary" id="runSearchBtn" disabled>بحث</button>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -44,9 +440,155 @@
       "https://unpkg.com/@vladmandic/face-api/model",
       "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model"
     ];
-    // Lower = stricter match. Typical real matches are ~0.25 - 0.45.
-    const THRESHOLD = 0.46;
-    let photoDatabase = [];
+    const THRESHOLD = 0.50;
+
+    const I18N = {
+      ar: {
+        title: "معرض صور الزفاف",
+        subtitle: "تصفح جميع الصور أو ابحث عن صورك عبر صورة شخصية",
+        findBtn: "ابحث عن صورك",
+        downloadAll: "تحميل الكل",
+        langBtn: "English",
+        viewAll: "عرض جميع الصور",
+        viewMatched: "الصور المطابقة لصورتك",
+        showAll: "عرض الكل",
+        sizeSmall: "صغير",
+        sizeMedium: "متوسط",
+        sizeLarge: "كبير",
+        downloadOne: "تحميل",
+        openDrive: "فتح في Drive",
+        loadingAlbum: "جاري تحميل الألبوم...",
+        loadingAi: "جاري تحميل محرك البحث بالوجه...",
+        readyAll: (n) => `جاهز — إجمالي الصور في الألبوم: ${n}`,
+        readyFiltered: (n) => `تم العثور على ${n} صورة مطابقة`,
+        noMatches: "لم يتم العثور على صور مطابقة. جرّب صورة أوضح للوجه من الأمام.",
+        emptyAlbum: "لا توجد صور في الألبوم حالياً.",
+        modalTitle: "ابحث عن صورك",
+        modalDesc: "اختر التقاط سيلفي بالكاميرا أو رفع صورة واضحة لوجهك، ثم اضغط بحث.",
+        cameraTitle: "التقاط سيلفي",
+        cameraSub: "فتح الكاميرا الأمامية",
+        uploadTitle: "رفع صورة",
+        uploadSub: "اختيار صورة من الجهاز",
+        cancel: "إلغاء",
+        search: "بحث",
+        scanning: "جاري تحليل الوجه والبحث في الألبوم...",
+        noFace: "لم يتم التعرف على وجه بوضوح. يرجى اختيار صورة أوضح بإضاءة جيدة.",
+        batchNotice: (n) => `سيتم بدء تنزيل ${n} صور. إذا طلب المتصفح السماح بتنزيل عدة ملفات، اضغط «سماح» (Allow).`
+      },
+      en: {
+        title: "Wedding Photo Gallery",
+        subtitle: "Browse every photo in the album or find yours using a selfie or photo",
+        findBtn: "Find Your Photos",
+        downloadAll: "Download All",
+        langBtn: "العربية",
+        viewAll: "Showing All Photos",
+        viewMatched: "Showing Your Matched Photos",
+        showAll: "Show All",
+        sizeSmall: "Small",
+        sizeMedium: "Medium",
+        sizeLarge: "Large",
+        downloadOne: "Download",
+        openDrive: "Open Drive",
+        loadingAlbum: "Loading album...",
+        loadingAi: "Loading face-search engine...",
+        readyAll: (n) => `Ready — Total photos in album: ${n}`,
+        readyFiltered: (n) => `Found ${n} matching photo(s)`,
+        noMatches: "No matching photos found. Try a clearer, front-facing photo in good light.",
+        emptyAlbum: "No photos in the album yet.",
+        modalTitle: "Find Your Photos",
+        modalDesc: "Take a selfie with your camera or upload a clear photo of your face, then tap Search.",
+        cameraTitle: "Take Selfie",
+        cameraSub: "Open front camera",
+        uploadTitle: "Upload Photo",
+        uploadSub: "Choose from device",
+        cancel: "Cancel",
+        search: "Search",
+        scanning: "Scanning face and searching album...",
+        noFace: "Couldn't clearly detect a face. Please pick a clearer photo in good lighting.",
+        batchNotice: (n) => `Starting download for ${n} photos. If your browser asks to allow multiple downloads, click Allow.`
+      }
+    };
+
+    let lang = "ar";
+    let allPhotos = [];
+    let displayedPhotos = [];
+    let isFiltered = false;
+    let aiReady = false;
+    let selectedFile = null;
+
+    const $ = (id) => document.getElementById(id);
+
+    function t(key, ...args) {
+      const val = I18N[lang][key];
+      return typeof val === "function" ? val(...args) : val;
+    }
+
+    function applyLanguage(newLang) {
+      lang = newLang;
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+
+      $("titleText").textContent = t("title");
+      $("subtitleText").textContent = t("subtitle");
+      $("findBtnText").textContent = t("findBtn");
+      $("downloadAllText").textContent = t("downloadAll");
+      $("langToggleBtn").textContent = t("langBtn");
+      $("showAllText").textContent = t("showAll");
+      $("sizeSmallBtn").textContent = t("sizeSmall");
+      $("sizeMediumBtn").textContent = t("sizeMedium");
+      $("sizeLargeBtn").textContent = t("sizeLarge");
+
+      $("modalTitle").textContent = t("modalTitle");
+      $("modalDesc").textContent = t("modalDesc");
+      $("cameraChoiceTitle").textContent = t("cameraTitle");
+      $("cameraChoiceSub").textContent = t("cameraSub");
+      $("uploadChoiceTitle").textContent = t("uploadTitle");
+      $("uploadChoiceSub").textContent = t("uploadSub");
+      $("cancelModalBtn").textContent = t("cancel");
+      $("runSearchBtn").textContent = t("search");
+
+      $("viewBadgeText").textContent = isFiltered ? t("viewMatched") : t("viewAll");
+      $("resetFilterBtn").style.display = isFiltered ? "inline-flex" : "none";
+
+      if (allPhotos.length > 0) {
+        $("statusText").textContent = isFiltered
+          ? t("readyFiltered", displayedPhotos.length)
+          : t("readyAll", allPhotos.length);
+      }
+
+      renderGrid(displayedPhotos);
+    }
+
+    function renderGrid(list) {
+      const grid = $("photoGrid");
+      const empty = $("emptyState");
+
+      if (!list || list.length === 0) {
+        grid.innerHTML = "";
+        empty.style.display = "block";
+        empty.textContent = isFiltered ? t("noMatches") : t("emptyAlbum");
+        return;
+      }
+
+      empty.style.display = "none";
+      grid.innerHTML = list.map((photo) => {
+        const previewUrl = `https://drive.google.com/thumbnail?id=${photo.id}&sz=w800`;
+        const downloadUrl = `https://drive.google.com/uc?export=download&id=${photo.id}`;
+        const viewUrl = `https://drive.google.com/file/d/${photo.id}/view`;
+        return `
+          <article class="card">
+            <img src="${previewUrl}" loading="lazy" alt="${photo.name || "Wedding photo"}" />
+            <div class="card-body">
+              <div class="card-name" title="${photo.name || ""}">${photo.name || photo.id}</div>
+              <div class="card-actions">
+                <a class="card-link" href="${downloadUrl}" target="_blank" rel="noopener">${t("downloadOne")}</a>
+                <a class="card-link" href="${viewUrl}" target="_blank" rel="noopener">${t("openDrive")}</a>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
 
     function loadScript(src) {
       return new Promise((resolve, reject) => {
@@ -67,7 +609,7 @@
           if (window.faceapi) return;
         } catch (_) {}
       }
-      throw new Error("Could not load face-api script from CDN");
+      throw new Error("Could not load face-api script");
     }
 
     async function loadModelsWithFallback() {
@@ -81,24 +623,7 @@
           return;
         } catch (_) {}
       }
-      throw new Error("Could not load AI model weights from CDN");
-    }
-
-    async function init() {
-      const statusEl = document.getElementById("status");
-      try {
-        await ensureFaceApiLoaded();
-        statusEl.textContent = "Loading AI models...";
-        await loadModelsWithFallback();
-
-        const res = await fetch("faces.json?v=" + Date.now());
-        photoDatabase = await res.json();
-
-        document.getElementById("selfieInput").disabled = false;
-        statusEl.textContent = `Ready! Search across ${photoDatabase.length} indexed photos.`;
-      } catch (err) {
-        statusEl.textContent = `Setup error: ${err.message}. Try disabling ad-blockers/VPNs or refreshing.`;
-      }
+      throw new Error("Could not load AI models");
     }
 
     function euclideanDistance(a, b) {
@@ -106,6 +631,7 @@
     }
 
     function bestDistanceForPhoto(guestVector, faceVecs) {
+      if (!Array.isArray(faceVecs) || faceVecs.length === 0) return Infinity;
       let best = Infinity;
       for (const vec of faceVecs) {
         const d = euclideanDistance(guestVector, vec);
@@ -114,48 +640,138 @@
       return best;
     }
 
-    document.getElementById("selfieInput").addEventListener("change", async (e) => {
-      const file = e.target.files[0];
+    function handleFileSelection(file) {
       if (!file) return;
-
-      const status = document.getElementById("status");
-      const results = document.getElementById("results");
-      results.innerHTML = "";
-      status.textContent = "Scanning your selfie...";
-
-      const img = await faceapi.bufferToImage(file);
-      const detection = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
-
-      if (!detection) {
-        status.textContent = "Couldn't clearly detect a face. Please try another photo in good lighting.";
-        return;
+      selectedFile = file;
+      $("modalStatus").textContent = "";
+      $("previewBox").classList.add("has-img");
+      $("selfiePreview").src = URL.createObjectURL(file);
+      $("selectedFileName").textContent = file.name || "selfie.jpg";
+      if (aiReady) {
+        $("runSearchBtn").disabled = false;
       }
+    }
 
-      const guestVector = Array.from(detection.descriptor);
+    $("langToggleBtn").addEventListener("click", () => {
+      applyLanguage(lang === "ar" ? "en" : "ar");
+    });
 
-      const matches = photoDatabase
-        .map(photo => ({ ...photo, dist: bestDistanceForPhoto(guestVector, photo.faces) }))
-        .filter(item => item.dist < THRESHOLD)
-        .sort((a, b) => a.dist - b.dist);
-
-      if (matches.length === 0) {
-        status.textContent = "No matching photos found at strict match level. Try a clear, front-facing selfie in good light.";
-        return;
-      }
-
-      status.textContent = `Found ${matches.length} photo(s) of you!`;
-      matches.forEach(photo => {
-        const previewUrl = `https://drive.google.com/thumbnail?id=${photo.id}&sz=w800`;
-        const downloadUrl = `https://drive.google.com/uc?export=download&id=${photo.id}`;
-        results.innerHTML += `
-          <div class="card">
-            <img src="${previewUrl}" loading="lazy" alt="Wedding photo" />
-            <div class="meta">Match score: ${photo.dist.toFixed(2)}</div>
-            <a href="${downloadUrl}" target="_blank" rel="noopener">Download Full Quality</a>
-          </div>
-        `;
+    document.querySelectorAll(".size-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".size-btn").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        document.body.classList.remove("size-small", "size-medium", "size-large");
+        document.body.classList.add(`size-${btn.dataset.size}`);
       });
     });
+
+    $("openSearchBtn").addEventListener("click", () => {
+      $("modalStatus").textContent = "";
+      $("searchModal").classList.add("open");
+    });
+
+    function closeModal() {
+      $("searchModal").classList.remove("open");
+    }
+
+    $("closeModalBtn").addEventListener("click", closeModal);
+    $("cancelModalBtn").addEventListener("click", closeModal);
+    $("searchModal").addEventListener("click", (e) => {
+      if (e.target === $("searchModal")) closeModal();
+    });
+
+    $("cameraInput").addEventListener("change", (e) => handleFileSelection(e.target.files[0]));
+    $("galleryInput").addEventListener("change", (e) => handleFileSelection(e.target.files[0]));
+
+    $("runSearchBtn").addEventListener("click", async () => {
+      if (!selectedFile || !aiReady) return;
+      $("runSearchBtn").disabled = true;
+      $("modalStatus").textContent = t("scanning");
+
+      try {
+        const img = await faceapi.bufferToImage(selectedFile);
+        const detection = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
+
+        if (!detection) {
+          $("modalStatus").textContent = t("noFace");
+          $("runSearchBtn").disabled = false;
+          return;
+        }
+
+        const guestVector = Array.from(detection.descriptor);
+        const matched = allPhotos
+          .map((photo) => ({ ...photo, dist: bestDistanceForPhoto(guestVector, photo.faces) }))
+          .filter((item) => item.dist < THRESHOLD)
+          .sort((a, b) => a.dist - b.dist);
+
+        isFiltered = true;
+        displayedPhotos = matched;
+        $("viewBadgeText").textContent = t("viewMatched");
+        $("resetFilterBtn").style.display = "inline-flex";
+        $("statusText").textContent = matched.length > 0
+          ? t("readyFiltered", matched.length)
+          : t("noMatches");
+
+        renderGrid(displayedPhotos);
+        closeModal();
+      } catch (err) {
+        $("modalStatus").textContent = err.message || "Error scanning photo";
+      } finally {
+        $("runSearchBtn").disabled = false;
+      }
+    });
+
+    $("resetFilterBtn").addEventListener("click", () => {
+      isFiltered = false;
+      displayedPhotos = [...allPhotos];
+      $("viewBadgeText").textContent = t("viewAll");
+      $("resetFilterBtn").style.display = "none";
+      $("statusText").textContent = t("readyAll", allPhotos.length);
+      renderGrid(displayedPhotos);
+    });
+
+    $("downloadAllBtn").addEventListener("click", () => {
+      if (!displayedPhotos.length) return;
+      $("statusText").textContent = t("batchNotice", displayedPhotos.length);
+      displayedPhotos.forEach((photo, idx) => {
+        setTimeout(() => {
+          const a = document.createElement("a");
+          a.href = `https://drive.google.com/uc?export=download&id=${photo.id}`;
+          a.download = photo.name || `${photo.id}.jpg`;
+          a.target = "_blank";
+          a.rel = "noopener";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        }, idx * 250);
+      });
+    });
+
+    async function init() {
+      applyLanguage("ar");
+      $("statusText").textContent = t("loadingAlbum");
+
+      try {
+        const res = await fetch("faces.json?v=" + Date.now());
+        const data = await res.json();
+        allPhotos = Array.isArray(data) ? data : (data.photos || []);
+        displayedPhotos = [...allPhotos];
+        renderGrid(displayedPhotos);
+
+        if (displayedPhotos.length > 0) {
+          $("downloadAllBtn").disabled = false;
+        }
+        $("statusText").textContent = `${t("readyAll", allPhotos.length)} — ${t("loadingAi")}`;
+
+        await ensureFaceApiLoaded();
+        await loadModelsWithFallback();
+        aiReady = true;
+        $("openSearchBtn").disabled = false;
+        $("statusText").textContent = t("readyAll", allPhotos.length);
+      } catch (err) {
+        $("statusText").textContent = `Error: ${err.message}`;
+      }
+    }
 
     init();
   </script>
