@@ -26,10 +26,7 @@
       --img-h: 235px;
     }
 
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body {
       margin: 0;
@@ -50,7 +47,6 @@
       padding: 14px 14px calc(92px + env(safe-area-inset-bottom));
     }
 
-    /* Header: Left controls in fixed LTR row, Title centered, Right spacer balances width */
     header.topbar {
       position: sticky;
       top: 10px;
@@ -59,16 +55,14 @@
       grid-template-columns: minmax(215px, auto) 1fr minmax(215px, auto);
       align-items: center;
       gap: 10px;
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 12px 16px;
       box-shadow: var(--shadow);
     }
 
-    /* Keep left-side controls anchored on the physical left even in RTL */
     .header-left {
       direction: ltr;
       display: flex;
@@ -77,21 +71,10 @@
       justify-self: start;
     }
 
-    .lang-slot {
-      width: 78px;
-      flex-shrink: 0;
-    }
+    .lang-slot { width: 78px; flex-shrink: 0; }
+    .search-slot { width: 142px; flex-shrink: 0; }
 
-    .search-slot {
-      width: 142px;
-      flex-shrink: 0;
-    }
-
-    .header-center {
-      text-align: center;
-      min-width: 0;
-    }
-
+    .header-center { text-align: center; min-width: 0; }
     .header-center h1 {
       margin: 0;
       font-size: clamp(1.1rem, 2.2vw, 1.45rem);
@@ -100,7 +83,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-
     .header-center p {
       margin: 2px 0 0;
       font-size: 0.82rem;
@@ -109,11 +91,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-
-    .header-right-spacer {
-      justify-self: end;
-      min-width: 1px;
-    }
+    .header-right-spacer { justify-self: end; min-width: 1px; }
 
     .btn {
       display: inline-flex;
@@ -130,49 +108,17 @@
       font-size: 0.86rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.14s ease, border-color 0.14s ease, transform 0.1s ease;
       text-decoration: none;
       white-space: nowrap;
     }
 
-    .btn:active:not(:disabled) {
-      transform: scale(0.98);
-    }
+    .btn:hover:not(:disabled) { background: var(--surface-2); border-color: #cfc8bd; }
+    .btn-primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+    .btn-primary:hover:not(:disabled) { background: var(--accent-hover); border-color: var(--accent-hover); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .lang-btn { width: 100%; padding: 0 8px; font-size: 0.82rem; }
+    .search-btn { width: 100%; padding: 0 12px; font-size: 0.84rem; }
 
-    .btn:hover:not(:disabled) {
-      background: var(--surface-2);
-      border-color: #cfc8bd;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: var(--accent-text);
-      border-color: var(--accent);
-    }
-
-    .btn-primary:hover:not(:disabled) {
-      background: var(--accent-hover);
-      border-color: var(--accent-hover);
-    }
-
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .lang-btn {
-      width: 100%;
-      padding: 0 8px;
-      font-size: 0.82rem;
-    }
-
-    .search-btn {
-      width: 100%;
-      padding: 0 12px;
-      font-size: 0.84rem;
-    }
-
-    /* Toolbar: Grid size locked on physical left, actions & status on right */
     .toolbar {
       direction: ltr;
       display: grid;
@@ -209,10 +155,7 @@
       cursor: pointer;
     }
 
-    .size-btn.active {
-      background: var(--accent);
-      color: var(--accent-text);
-    }
+    .size-btn.active { background: var(--accent); color: var(--accent-text); }
 
     .toolbar-right {
       direction: inherit;
@@ -234,35 +177,12 @@
       white-space: nowrap;
     }
 
-    .pill-btn {
-      height: 34px;
-      padding: 0 12px;
-      font-size: 0.82rem;
-    }
+    .pill-btn { height: 34px; padding: 0 12px; font-size: 0.82rem; }
+    .status-line { margin-top: 10px; padding-inline: 6px; font-size: 0.85rem; color: var(--muted); min-height: 20px; }
 
-    .status-line {
-      margin-top: 10px;
-      padding-inline: 6px;
-      font-size: 0.85rem;
-      color: var(--muted);
-      min-height: 20px;
-    }
-
-    /* Display sizes */
-    body.size-small {
-      --card-min: 155px;
-      --img-h: 165px;
-    }
-
-    body.size-medium {
-      --card-min: 225px;
-      --img-h: 235px;
-    }
-
-    body.size-large {
-      --card-min: 325px;
-      --img-h: 330px;
-    }
+    body.size-small { --card-min: 155px; --img-h: 165px; }
+    body.size-medium { --card-min: 225px; --img-h: 235px; }
+    body.size-large { --card-min: 325px; --img-h: 330px; }
 
     .grid {
       display: grid;
@@ -280,13 +200,9 @@
       box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
-      transition: border-color 0.15s ease, transform 0.15s ease;
     }
 
-    .card.selected {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 2px var(--accent);
-    }
+    .card.selected { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
 
     .card-media {
       position: relative;
@@ -296,7 +212,6 @@
       overflow: hidden;
     }
 
-    /* Focus upper half so faces are clearly framed */
     .card-media img {
       width: 100%;
       height: 100%;
@@ -314,7 +229,6 @@
       border-radius: 8px;
       border: 1.5px solid rgba(255, 255, 255, 0.9);
       background: rgba(24, 22, 21, 0.55);
-      backdrop-filter: blur(6px);
       color: #ffffff;
       display: inline-flex;
       align-items: center;
@@ -324,33 +238,11 @@
       font-weight: 700;
     }
 
-    .card.selected .select-check {
-      background: var(--accent);
-      border-color: var(--accent);
-    }
+    .card.selected .select-check { background: var(--accent); border-color: var(--accent); }
 
-    .card-body {
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      flex: 1;
-      justify-content: space-between;
-    }
-
-    .card-name {
-      font-size: 0.78rem;
-      color: var(--muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .card-actions {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 6px;
-    }
+    .card-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; flex: 1; justify-content: space-between; }
+    .card-name { font-size: 0.78rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-actions { display: grid; grid-template-columns: 1fr auto; gap: 6px; }
 
     .card-dl {
       display: inline-flex;
@@ -364,10 +256,6 @@
       text-decoration: none;
       font-size: 0.8rem;
       font-weight: 600;
-    }
-
-    .card-dl:hover {
-      background: var(--accent-hover);
     }
 
     .card-view {
@@ -395,17 +283,12 @@
       color: var(--muted);
     }
 
-    /* Mobile bottom bar */
-    .mobile-dock {
-      display: none;
-    }
+    .mobile-dock { display: none; }
 
-    /* Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
       background: rgba(18, 16, 15, 0.58);
-      backdrop-filter: blur(4px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -413,9 +296,7 @@
       z-index: 100;
     }
 
-    .modal-backdrop.open {
-      display: flex;
-    }
+    .modal-backdrop.open { display: flex; }
 
     .modal {
       width: 100%;
@@ -428,17 +309,8 @@
       position: relative;
     }
 
-    .modal h2 {
-      margin: 0 0 6px;
-      font-size: 1.18rem;
-      padding-inline-end: 36px;
-    }
-
-    .modal p {
-      margin: 0 0 16px;
-      font-size: 0.88rem;
-      color: var(--muted);
-    }
+    .modal h2 { margin: 0 0 6px; font-size: 1.18rem; padding-inline-end: 36px; }
+    .modal p { margin: 0 0 16px; font-size: 0.88rem; color: var(--muted); }
 
     .modal-close {
       position: absolute;
@@ -454,13 +326,7 @@
       cursor: pointer;
     }
 
-    .choice-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
+    .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
     .choice-card {
       border: 1.5px solid var(--border);
       border-radius: 16px;
@@ -468,35 +334,12 @@
       text-align: center;
       cursor: pointer;
       background: var(--bg);
-      transition: border-color 0.15s ease, background-color 0.15s ease;
     }
+    .choice-card strong { display: block; font-size: 0.94rem; margin-bottom: 3px; }
+    .choice-card span { font-size: 0.78rem; color: var(--muted); }
 
-    .choice-card:hover {
-      border-color: var(--accent);
-      background: var(--surface-2);
-    }
-
-    .choice-card strong {
-      display: block;
-      font-size: 0.94rem;
-      margin-bottom: 3px;
-    }
-
-    .choice-card span {
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    .preview-box {
-      display: none;
-      text-align: center;
-      margin-bottom: 14px;
-    }
-
-    .preview-box.has-img {
-      display: block;
-    }
-
+    .preview-box { display: none; text-align: center; margin-bottom: 14px; }
+    .preview-box.has-img { display: block; }
     .preview-box img {
       width: 110px;
       height: 110px;
@@ -507,13 +350,584 @@
       margin-bottom: 6px;
     }
 
-    .modal-status {
-      font-size: 0.86rem;
-      color: var(--muted);
-      margin-bottom: 14px;
-      min-height: 20px;
-    }
+    .modal-status { font-size: 0.86rem; color: var(--muted); margin-bottom: 14px; min-height: 20px; }
+    .modal-footer { display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; }
+    input[type="file"] { display: none; }
 
-    .modal-footer {
-      display: grid;
-      grid-template-columns: 1fr 1.4fr
+    @media (max-width: 820px) {
+      header.topbar { grid-template-columns: auto 1fr auto; padding: 10px 12px; }
+      .lang-slot { width: 72px; }
+      .search-slot { display: none; }
+      .header-center p { display: none; }
+      .header-right-spacer { width: 72px; }
+      .toolbar { grid-template-columns: 1fr; gap: 10px; padding: 10px; }
+      .size-group { width: 100%; grid-template-columns: repeat(3, 1fr); }
+      .size-btn { width: 100%; }
+      .toolbar-right { justify-content: space-between; }
+      body.size-small { --card-min: 106px; --img-h: 124px; }
+      body.size-medium { --card-min: 156px; --img-h: 175px; }
+      body.size-large { --card-min: 280px; --img-h: 285px; }
+      .grid { gap: 10px; }
+      .mobile-dock {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 45;
+        display: flex;
+        gap: 10px;
+        padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+        background: rgba(255, 255, 255, 0.94);
+        border-top: 1px solid var(--border);
+      }
+      .mobile-dock .btn-primary { width: 100%; height: 46px; font-size: 0.94rem; }
+      .modal-backdrop.open { align-items: flex-end; padding: 0; }
+      .modal { max-width: 100%; border-radius: 24px 24px 0 0; padding: 20px 16px calc(20px + env(safe-area-inset-bottom)); }
+    }
+  </style>
+</head>
+<body class="size-medium">
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="header-left">
+        <div class="lang-slot">
+          <button class="btn lang-btn" id="langToggleBtn" type="button">English</button>
+        </div>
+        <div class="search-slot">
+          <button class="btn btn-primary search-btn" id="openSearchBtnDesktop" type="button">
+            <span id="findBtnTextDesktop">ابحث عن صورك</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <h1 id="titleText">معرض صور الزفاف</h1>
+        <p id="subtitleText">تصفح جميع الصور أو ابحث عن صورك عبر صورة شخصية</p>
+      </div>
+
+      <div class="header-right-spacer" aria-hidden="true"></div>
+    </header>
+
+    <div class="toolbar">
+      <div class="size-group" role="group" aria-label="Display size">
+        <button class="size-btn" type="button" data-size="small" id="sizeSmallBtn">صغير</button>
+        <button class="size-btn active" type="button" data-size="medium" id="sizeMediumBtn">متوسط</button>
+        <button class="size-btn" type="button" data-size="large" id="sizeLargeBtn">كبير</button>
+      </div>
+
+      <div class="toolbar-right">
+        <span class="badge-pill" id="viewBadgeText">جميع الصور</span>
+
+        <button class="btn pill-btn" id="selectAllVisibleBtn" type="button" style="display:none;">
+          <span id="selectAllText">تحديد الكل</span>
+        </button>
+
+        <button class="btn pill-btn" id="clearSelectionBtn" type="button" style="display:none;">
+          <span id="clearSelText">إلغاء التحديد</span>
+        </button>
+
+        <button class="btn btn-primary pill-btn" id="downloadSelectedBtn" type="button" style="display:none;">
+          <span id="downloadSelectedText">تحميل المحدد</span> (<span id="selectedCountSpan">0</span>)
+        </button>
+
+        <button class="btn btn-primary pill-btn" id="downloadAllBtn" type="button" style="display:none;">
+          <span id="downloadAllText">تحميل الكل</span>
+        </button>
+
+        <button class="btn pill-btn" id="resetFilterBtn" type="button" style="display:none;">
+          <span id="showAllText">عرض الكل</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="status-line" id="statusText">جاري تحميل الألبوم...</div>
+    <div class="grid" id="photoGrid"></div>
+    <div class="empty-state" id="emptyState" style="display:none;"></div>
+  </div>
+
+  <div class="mobile-dock">
+    <button class="btn btn-primary" id="openSearchBtnMobile" type="button">
+      <span id="findBtnTextMobile">ابحث عن صورك</span>
+    </button>
+  </div>
+
+  <div class="modal-backdrop" id="searchModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <button class="modal-close" id="closeModalBtn" type="button" aria-label="Close">×</button>
+      <h2 id="modalTitle">ابحث عن صورك</h2>
+      <p id="modalDesc">التقط صورة سيلفي أو اختر صورة واضحة لوجهك ثم اضغط بحث (تُحذف تلقائياً عند العودة للكل أو التحديث).</p>
+
+      <div class="choice-grid">
+        <label class="choice-card" for="cameraInput">
+          <strong id="cameraChoiceTitle">التقاط سيلفي</strong>
+          <span id="cameraChoiceSub">فتح الكاميرا الأمامية</span>
+          <input type="file" id="cameraInput" accept="image/*" capture="user" />
+        </label>
+        <label class="choice-card" for="galleryInput">
+          <strong id="uploadChoiceTitle">رفع صورة</strong>
+          <span id="uploadChoiceSub">اختيار صورة من الجهاز</span>
+          <input type="file" id="galleryInput" accept="image/*" />
+        </label>
+      </div>
+
+      <div class="preview-box" id="previewBox">
+        <img id="selfiePreview" alt="Selected face" />
+        <div id="selectedFileName" style="font-size:0.8rem; color:var(--muted);"></div>
+      </div>
+
+      <div class="modal-status" id="modalStatus"></div>
+
+      <div class="modal-footer">
+        <button class="btn" id="cancelModalBtn" type="button">إلغاء</button>
+        <button class="btn btn-primary" id="runSearchBtn" type="button" disabled>بحث</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const SCRIPT_URLS = [
+        "https://unpkg.com/@vladmandic/face-api/dist/face-api.js",
+        "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"
+      ];
+      const MODEL_URLS = [
+        "https://unpkg.com/@vladmandic/face-api/model",
+        "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model"
+      ];
+      const THRESHOLD = 0.50;
+
+      const I18N = {
+        ar: {
+          title: "معرض صور الزفاف",
+          subtitle: "تصفح جميع الصور أو ابحث عن صورك عبر صورة شخصية",
+          findBtn: "ابحث عن صورك",
+          downloadAll: "تحميل الكل",
+          downloadSelected: "تحميل المحدد",
+          selectAll: "تحديد الكل",
+          clearSel: "إلغاء التحديد",
+          langBtn: "English",
+          viewAll: "جميع الصور",
+          viewMatched: "صورك المطابقة",
+          showAll: "عرض الكل",
+          sizeSmall: "صغير",
+          sizeMedium: "متوسط",
+          sizeLarge: "كبير",
+          downloadOne: "تحميل",
+          openDrive: "Drive",
+          loadingAlbum: "جاري تحميل الألبوم...",
+          loadingAiOnDemand: "جاري تحميل محرك البحث بالوجه...",
+          readyAll: (n) => "جاهز — إجمالي الصور: " + n,
+          readyFiltered: (n) => "تم العثور على " + n + " صورة خاصة بك",
+          noMatches: "لم يتم العثور على صور مطابقة. جرّب صورة أوضح للوجه من الأمام.",
+          emptyAlbum: "لا توجد صور في الألبوم حالياً.",
+          modalTitle: "ابحث عن صورك",
+          modalDesc: "التقط سيلفي أو اختر صورة واضحة لوجهك ثم اضغط بحث (تُحذف تلقائياً عند عرض الكل أو التحديث).",
+          cameraTitle: "التقاط سيلفي",
+          cameraSub: "فتح الكاميرا الأمامية",
+          uploadTitle: "رفع صورة",
+          uploadSub: "اختيار صورة من الجهاز",
+          cancel: "إلغاء",
+          search: "بحث",
+          scanning: "جاري تحليل الوجه والبحث...",
+          noFace: "لم يتم التعرف على وجه بوضوح. جرّب صورة أوضح بإضاءة جيدة.",
+          batchNotice: (n) => "جاري بدء تنزيل " + n + " صور. إذا طلب المتصفح السماح بتنزيل عدة ملفات، اضغط «سماح» (Allow)."
+        },
+        en: {
+          title: "Wedding Gallery",
+          subtitle: "Browse all photos or find yours with a selfie or photo",
+          findBtn: "Find My Photos",
+          downloadAll: "Download All",
+          downloadSelected: "Download Selected",
+          selectAll: "Select All",
+          clearSel: "Clear",
+          langBtn: "العربية",
+          viewAll: "All Photos",
+          viewMatched: "Your Matched Photos",
+          showAll: "Show All",
+          sizeSmall: "Small",
+          sizeMedium: "Medium",
+          sizeLarge: "Large",
+          downloadOne: "Download",
+          openDrive: "Drive",
+          loadingAlbum: "Loading album...",
+          loadingAiOnDemand: "Loading face-search engine...",
+          readyAll: (n) => "Ready — Total photos: " + n,
+          readyFiltered: (n) => "Found " + n + " photo(s) of you",
+          noMatches: "No matching photos found. Try a clearer, front-facing photo in good light.",
+          emptyAlbum: "No photos in the album yet.",
+          modalTitle: "Find My Photos",
+          modalDesc: "Take a selfie or choose a clear photo of your face, then tap Search (cleared on Show All or refresh).",
+          cameraTitle: "Take Selfie",
+          cameraSub: "Open front camera",
+          uploadTitle: "Upload Photo",
+          uploadSub: "Choose from device",
+          cancel: "Cancel",
+          search: "Search",
+          scanning: "Scanning face and searching...",
+          noFace: "Couldn't clearly detect a face. Try a clearer photo in good lighting.",
+          batchNotice: (n) => "Starting download for " + n + " photos. If prompted for multiple downloads, click Allow."
+        }
+      };
+
+      let lang = "ar";
+      let allPhotos = [];
+      let displayedPhotos = [];
+      const selectedIds = new Set();
+      let isFiltered = false;
+      let aiReady = false;
+      let aiLoadingPromise = null;
+      let selectedFile = null;
+      let previewObjectUrl = null;
+
+      const $ = (id) => document.getElementById(id);
+
+      function t(key, ...args) {
+        const val = I18N[lang][key];
+        return typeof val === "function" ? val(...args) : val;
+      }
+
+      function clearSelfieMemory() {
+        selectedFile = null;
+        if (previewObjectUrl) {
+          URL.revokeObjectURL(previewObjectUrl);
+          previewObjectUrl = null;
+        }
+        $("selfiePreview").removeAttribute("src");
+        $("selectedFileName").textContent = "";
+        $("previewBox").classList.remove("has-img");
+        $("cameraInput").value = "";
+        $("galleryInput").value = "";
+        $("runSearchBtn").disabled = true;
+        $("modalStatus").textContent = "";
+      }
+
+      function syncToolbarButtons() {
+        const hasPhotos = displayedPhotos.length > 0;
+        const selCount = selectedIds.size;
+
+        $("viewBadgeText").textContent = isFiltered ? t("viewMatched") : t("viewAll");
+        $("resetFilterBtn").style.display = isFiltered ? "inline-flex" : "none";
+        $("downloadAllBtn").style.display = (isFiltered && hasPhotos) ? "inline-flex" : "none";
+        $("selectAllVisibleBtn").style.display = hasPhotos ? "inline-flex" : "none";
+        $("clearSelectionBtn").style.display = selCount > 0 ? "inline-flex" : "none";
+        $("downloadSelectedBtn").style.display = selCount > 0 ? "inline-flex" : "none";
+        $("selectedCountSpan").textContent = String(selCount);
+      }
+
+      function applyLanguage(newLang) {
+        lang = newLang;
+        document.documentElement.lang = lang;
+        document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+
+        $("titleText").textContent = t("title");
+        $("subtitleText").textContent = t("subtitle");
+        $("findBtnTextDesktop").textContent = t("findBtn");
+        $("findBtnTextMobile").textContent = t("findBtn");
+        $("downloadAllText").textContent = t("downloadAll");
+        $("downloadSelectedText").textContent = t("downloadSelected");
+        $("selectAllText").textContent = t("selectAll");
+        $("clearSelText").textContent = t("clearSel");
+        $("langToggleBtn").textContent = t("langBtn");
+        $("showAllText").textContent = t("showAll");
+        $("sizeSmallBtn").textContent = t("sizeSmall");
+        $("sizeMediumBtn").textContent = t("sizeMedium");
+        $("sizeLargeBtn").textContent = t("sizeLarge");
+
+        $("modalTitle").textContent = t("modalTitle");
+        $("modalDesc").textContent = t("modalDesc");
+        $("cameraChoiceTitle").textContent = t("cameraTitle");
+        $("cameraChoiceSub").textContent = t("cameraSub");
+        $("uploadChoiceTitle").textContent = t("uploadTitle");
+        $("uploadChoiceSub").textContent = t("uploadSub");
+        $("cancelModalBtn").textContent = t("cancel");
+        $("runSearchBtn").textContent = t("search");
+
+        syncToolbarButtons();
+
+        if (allPhotos.length > 0) {
+          $("statusText").textContent = isFiltered
+            ? t("readyFiltered", displayedPhotos.length)
+            : t("readyAll", allPhotos.length);
+        }
+
+        renderGrid(displayedPhotos);
+      }
+
+      function renderGrid(list) {
+        const grid = $("photoGrid");
+        const empty = $("emptyState");
+
+        if (!list || list.length === 0) {
+          grid.innerHTML = "";
+          empty.style.display = "block";
+          empty.textContent = isFiltered ? t("noMatches") : t("emptyAlbum");
+          return;
+        }
+
+        empty.style.display = "none";
+        grid.innerHTML = list.map((photo) => {
+          const isSel = selectedIds.has(photo.id);
+          const previewUrl = "https://drive.google.com/thumbnail?id=" + photo.id + "&sz=w800";
+          const downloadUrl = "https://drive.google.com/uc?export=download&id=" + photo.id;
+          const viewUrl = "https://drive.google.com/file/d/" + photo.id + "/view";
+          return (
+            '<article class="card ' + (isSel ? "selected" : "") + '" data-id="' + photo.id + '">' +
+              '<div class="card-media">' +
+                '<img src="' + previewUrl + '" loading="lazy" decoding="async" alt="' + (photo.name || "Wedding photo") + '" />' +
+                '<button class="select-check" type="button" data-select-id="' + photo.id + '" aria-label="Select photo">' + (isSel ? "✓" : "") + "</button>" +
+              "</div>" +
+              '<div class="card-body">' +
+                '<div class="card-name" title="' + (photo.name || "") + '">' + (photo.name || photo.id) + "</div>" +
+                '<div class="card-actions">' +
+                  '<a class="card-dl" href="' + downloadUrl + '" target="_blank" rel="noopener">' + t("downloadOne") + "</a>" +
+                  '<a class="card-view" href="' + viewUrl + '" target="_blank" rel="noopener">' + t("openDrive") + "</a>" +
+                "</div>" +
+              "</div>" +
+            "</article>"
+          );
+        }).join("");
+      }
+
+      function loadScript(src) {
+        return new Promise((resolve, reject) => {
+          const s = document.createElement("script");
+          s.src = src;
+          s.async = true;
+          s.onload = () => resolve();
+          s.onerror = () => reject(new Error("Failed to load " + src));
+          document.head.appendChild(s);
+        });
+      }
+
+      async function ensureFaceApiLoaded() {
+        if (window.faceapi) return;
+        for (const url of SCRIPT_URLS) {
+          try {
+            await loadScript(url);
+            if (window.faceapi) return;
+          } catch (_) {}
+        }
+        throw new Error("Could not load face-api script");
+      }
+
+      async function loadModelsWithFallback() {
+        for (const modelUrl of MODEL_URLS) {
+          try {
+            await Promise.all([
+              faceapi.nets.ssdMobilenetv1.loadFromUri(modelUrl),
+              faceapi.nets.faceLandmark68Net.loadFromUri(modelUrl),
+              faceapi.nets.faceRecognitionNet.loadFromUri(modelUrl)
+            ]);
+            return;
+          } catch (_) {}
+        }
+        throw new Error("Could not load AI models");
+      }
+
+      async function ensureAiReady() {
+        if (aiReady) return;
+        if (!aiLoadingPromise) {
+          aiLoadingPromise = (async () => {
+            $("modalStatus").textContent = t("loadingAiOnDemand");
+            await ensureFaceApiLoaded();
+            await loadModelsWithFallback();
+            aiReady = true;
+            if (selectedFile) $("runSearchBtn").disabled = false;
+            $("modalStatus").textContent = "";
+          })().catch((err) => {
+            aiLoadingPromise = null;
+            $("modalStatus").textContent = err.message || "AI load error";
+            throw err;
+          });
+        }
+        return aiLoadingPromise;
+      }
+
+      function euclideanDistance(a, b) {
+        return Math.sqrt(a.reduce((sum, val, i) => sum + Math.pow(val - b[i], 2), 0));
+      }
+
+      function bestDistanceForPhoto(guestVector, faceVecs) {
+        if (!Array.isArray(faceVecs) || faceVecs.length === 0) return Infinity;
+        let best = Infinity;
+        for (const vec of faceVecs) {
+          const d = euclideanDistance(guestVector, vec);
+          if (d < best) best = d;
+        }
+        return best;
+      }
+
+      function triggerBatchDownload(list) {
+        if (!list || !list.length) return;
+        $("statusText").textContent = t("batchNotice", list.length);
+        list.forEach((photo, idx) => {
+          setTimeout(() => {
+            const a = document.createElement("a");
+            a.href = "https://drive.google.com/uc?export=download&id=" + photo.id;
+            a.download = photo.name || (photo.id + ".jpg");
+            a.target = "_blank";
+            a.rel = "noopener";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+          }, idx * 240);
+        });
+      }
+
+      function handleFileSelection(file) {
+        if (!file) return;
+        if (previewObjectUrl) URL.revokeObjectURL(previewObjectUrl);
+        selectedFile = file;
+        previewObjectUrl = URL.createObjectURL(file);
+        $("selfiePreview").src = previewObjectUrl;
+        $("selectedFileName").textContent = file.name || "selfie.jpg";
+        $("previewBox").classList.add("has-img");
+        $("modalStatus").textContent = "";
+        if (aiReady) {
+          $("runSearchBtn").disabled = false;
+        } else {
+          ensureAiReady().catch(() => {});
+        }
+      }
+
+      function openSearchModal() {
+        $("searchModal").classList.add("open");
+        if (!aiReady) ensureAiReady().catch(() => {});
+      }
+
+      function closeSearchModal() {
+        $("searchModal").classList.remove("open");
+      }
+
+      $("langToggleBtn").addEventListener("click", () => applyLanguage(lang === "ar" ? "en" : "ar"));
+
+      document.querySelectorAll(".size-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll(".size-btn").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          document.body.classList.remove("size-small", "size-medium", "size-large");
+          document.body.classList.add("size-" + btn.dataset.size);
+        });
+      });
+
+      $("photoGrid").addEventListener("click", (e) => {
+        const checkBtn = e.target.closest("[data-select-id]");
+        if (!checkBtn) return;
+        const id = checkBtn.getAttribute("data-select-id");
+        if (selectedIds.has(id)) selectedIds.delete(id);
+        else selectedIds.add(id);
+        syncToolbarButtons();
+        renderGrid(displayedPhotos);
+      });
+
+      $("selectAllVisibleBtn").addEventListener("click", () => {
+        displayedPhotos.forEach((p) => selectedIds.add(p.id));
+        syncToolbarButtons();
+        renderGrid(displayedPhotos);
+      });
+
+      $("clearSelectionBtn").addEventListener("click", () => {
+        selectedIds.clear();
+        syncToolbarButtons();
+        renderGrid(displayedPhotos);
+      });
+
+      $("downloadSelectedBtn").addEventListener("click", () => {
+        triggerBatchDownload(allPhotos.filter((p) => selectedIds.has(p.id)));
+      });
+
+      $("openSearchBtnDesktop").addEventListener("click", openSearchModal);
+      $("openSearchBtnMobile").addEventListener("click", openSearchModal);
+      $("closeModalBtn").addEventListener("click", closeSearchModal);
+      $("cancelModalBtn").addEventListener("click", closeSearchModal);
+      $("searchModal").addEventListener("click", (e) => {
+        if (e.target === $("searchModal")) closeSearchModal();
+      });
+
+      $("cameraInput").addEventListener("change", (e) => handleFileSelection(e.target.files[0]));
+      $("galleryInput").addEventListener("change", (e) => handleFileSelection(e.target.files[0]));
+
+      $("runSearchBtn").addEventListener("click", async () => {
+        if (!selectedFile) return;
+        $("runSearchBtn").disabled = true;
+
+        try {
+          await ensureAiReady();
+          $("modalStatus").textContent = t("scanning");
+
+          const img = await faceapi.bufferToImage(selectedFile);
+          const detection = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
+
+          if (!detection) {
+            $("modalStatus").textContent = t("noFace");
+            $("runSearchBtn").disabled = false;
+            return;
+          }
+
+          const guestVector = Array.from(detection.descriptor);
+          const matched = allPhotos
+            .map((photo) => ({ ...photo, dist: bestDistanceForPhoto(guestVector, photo.faces) }))
+            .filter((item) => item.dist < THRESHOLD)
+            .sort((a, b) => a.dist - b.dist);
+
+          isFiltered = true;
+          displayedPhotos = matched;
+          selectedIds.clear();
+          syncToolbarButtons();
+          $("statusText").textContent = matched.length > 0 ? t("readyFiltered", matched.length) : t("noMatches");
+          renderGrid(displayedPhotos);
+          closeSearchModal();
+        } catch (err) {
+          $("modalStatus").textContent = err.message || "Error scanning photo";
+        } finally {
+          if (selectedFile && aiReady) $("runSearchBtn").disabled = false;
+        }
+      });
+
+      $("resetFilterBtn").addEventListener("click", () => {
+        clearSelfieMemory();
+        isFiltered = false;
+        displayedPhotos = [...allPhotos];
+        selectedIds.clear();
+        syncToolbarButtons();
+        $("statusText").textContent = t("readyAll", allPhotos.length);
+        renderGrid(displayedPhotos);
+      });
+
+      $("downloadAllBtn").addEventListener("click", () => {
+        if (!isFiltered || !displayedPhotos.length) return;
+        triggerBatchDownload(displayedPhotos);
+      });
+
+      window.addEventListener("beforeunload", clearSelfieMemory);
+      window.addEventListener("pagehide", clearSelfieMemory);
+
+      async function init() {
+        applyLanguage("ar");
+        syncToolbarButtons();
+        $("statusText").textContent = t("loadingAlbum");
+
+        try {
+          const res = await fetch("faces.json?v=" + Date.now());
+          const data = await res.json();
+          allPhotos = Array.isArray(data) ? data : (data.photos || []);
+          displayedPhotos = [...allPhotos];
+          renderGrid(displayedPhotos);
+          syncToolbarButtons();
+          $("statusText").textContent = t("readyAll", allPhotos.length);
+
+          if ("requestIdleCallback" in window) {
+            requestIdleCallback(() => ensureAiReady().catch(() => {}), { timeout: 2500 });
+          } else {
+            setTimeout(() => ensureAiReady().catch(() => {}), 800);
+          }
+        } catch (err) {
+          $("statusText").textContent = "Error: " + err.message;
+        }
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
