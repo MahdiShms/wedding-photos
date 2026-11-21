@@ -347,16 +347,23 @@
       justify-content: center;
       min-height: 38px;
       padding: 0 10px;
+      border: none;
       border-radius: var(--radius-sm);
       background: var(--accent);
       color: var(--accent-text);
-      text-decoration: none;
+      font-family: inherit;
       font-size: 0.86rem;
       font-weight: 700;
+      cursor: pointer;
     }
 
-    .card-dl:hover {
+    .card-dl:hover:not(:disabled) {
       background: var(--accent-hover);
+    }
+
+    .card-dl:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
     }
 
     .card-view {
@@ -417,7 +424,7 @@
       display: none;
     }
 
-    /* Modals */
+    /* Search Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -435,9 +442,7 @@
 
     .modal {
       width: 100%;
-      max-width: 480px;
-      max-height: 88vh;
-      overflow-y: auto;
+      max-width: 460px;
       background: var(--surface);
       border: 1.5px solid var(--border);
       border-radius: 24px;
@@ -536,32 +541,6 @@
       display: grid;
       grid-template-columns: 1fr 1.4fr;
       gap: 10px;
-    }
-
-    .phone-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin: 12px 0 16px;
-    }
-
-    .phone-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-    }
-
-    .phone-row span {
-      font-size: 0.86rem;
-      font-weight: 600;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
 
     input[type="file"] {
@@ -769,17 +748,6 @@
     </div>
   </div>
 
-  <!-- Phone / Direct Download Helper Modal -->
-  <div class="modal-backdrop" id="phoneDownloadModal" role="dialog" aria-modal="true" aria-labelledby="phoneModalTitle">
-    <div class="modal">
-      <button class="modal-close" id="closePhoneModalBtn" type="button" aria-label="Close">×</button>
-      <h2 id="phoneModalTitle">تحميل الصور المختارة</h2>
-      <p id="phoneModalDesc">على الآيفون، اضغط «فتح / حفظ» لكل صورة أو استخدم «مشاركة» لحفظها مباشرة في الصور.</p>
-      <div class="phone-list" id="phoneDownloadList"></div>
-      <button class="btn btn-primary" style="width:100%;" id="donePhoneModalBtn" type="button">تم</button>
-    </div>
-  </div>
-
   <script>
     (function () {
       const SCRIPT_URLS = [
@@ -801,8 +769,7 @@
           title: "معرض صور الزفاف",
           subtitle: "تصفح جميع الصور أو ابحث عن صورك بسهولة",
           findBtn: "ابحث عن صورك",
-          downloadZip: "تحميل ملف ZIP",
-          downloadPhoneBatch: "تحميل الصور",
+          downloadZip: "تحميل ZIP",
           multiSelect: "تحديد متعدد",
           doneSelect: "إنهاء التحديد",
           selectAll: "تحديد الكل",
@@ -834,18 +801,13 @@
           floatingSelected: (n) => "تم تحديد " + n + " صورة",
           floatingMatchedAll: (n) => "صورك المطابقة (" + n + ")",
           buildingZip: (done, total) => "جاري تجهيز ملف ZIP... (" + done + "/" + total + ")",
-          zipReady: "تم تجهيز ملف ZIP وبدء التحميل!",
-          phoneModalTitle: "تحميل الصور المختارة",
-          phoneModalDesc: "على الآيفون، افتح كل صورة واضغط مطولاً أو «مشاركة ← حفظ الصورة» لحفظها في ألبوم الصور.",
-          openPhoto: "فتح الصورة",
-          doneBtn: "تم"
+          zipReady: "تم تحميل ملف ZIP"
         },
         en: {
           title: "Wedding Gallery",
           subtitle: "Browse all photos or find yours easily",
           findBtn: "Find My Photos",
           downloadZip: "Download ZIP",
-          downloadPhoneBatch: "Get Photos",
           multiSelect: "Multi-Select",
           doneSelect: "Done",
           selectAll: "Select All",
@@ -876,17 +838,10 @@
           noFace: "Couldn't clearly detect a face. Try a clearer photo in good lighting.",
           floatingSelected: (n) => n + " photo(s) selected",
           floatingMatchedAll: (n) => "Your matched photos (" + n + ")",
-          buildingZip: (done, total) => "Building ZIP archive... (" + done + "/" + total + ")",
-          zipReady: "ZIP ready and download started!",
-          phoneModalTitle: "Selected Photos",
-          phoneModalDesc: "On iPhone, open a photo and tap Share → Save Image to save directly into your Photos app.",
-          openPhoto: "Open Photo",
-          doneBtn: "Done"
+          buildingZip: (done, total) => "Building ZIP... (" + done + "/" + total + ")",
+          zipReady: "ZIP downloaded"
         }
       };
-
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
       let lang = "ar";
       let allPhotos = [];
@@ -905,10 +860,6 @@
       function t(key, ...args) {
         const val = I18N[lang][key];
         return typeof val === "function" ? val(...args) : val;
-      }
-
-      function getDownloadUrl(photo) {
-        return "https://drive.google.com/uc?export=download&id=" + photo.id;
       }
 
       function getViewUrl(photo) {
@@ -952,15 +903,14 @@
         $("selectAllVisibleBtn").style.display = (multiSelectMode && hasPhotos) ? "inline-flex" : "none";
 
         const floatBar = $("floatingDownloadBar");
-        const batchLabel = isIOS ? t("downloadPhoneBatch") : t("downloadZip");
         if (multiSelectMode && selCount > 0) {
           floatBar.classList.add("visible");
           $("floatingLabelText").textContent = t("floatingSelected", selCount);
-          $("floatingDownloadBtnText").textContent = batchLabel;
+          $("floatingDownloadBtnText").textContent = t("downloadZip");
         } else if (isFiltered && hasPhotos) {
           floatBar.classList.add("visible");
           $("floatingLabelText").textContent = t("floatingMatchedAll", displayedPhotos.length);
-          $("floatingDownloadBtnText").textContent = batchLabel;
+          $("floatingDownloadBtnText").textContent = t("downloadZip");
         } else {
           floatBar.classList.remove("visible");
         }
@@ -991,10 +941,6 @@
         $("cancelModalBtn").textContent = t("cancel");
         $("runSearchBtn").textContent = t("search");
 
-        $("phoneModalTitle").textContent = t("phoneModalTitle");
-        $("phoneModalDesc").textContent = t("phoneModalDesc");
-        $("donePhoneModalBtn").textContent = t("doneBtn");
-
         syncToolbarAndFloating();
 
         if (allPhotos.length > 0) {
@@ -1021,7 +967,6 @@
         grid.innerHTML = list.map((photo) => {
           const isSel = selectedIds.has(photo.id);
           const previewUrl = "https://drive.google.com/thumbnail?id=" + photo.id + "&sz=w800";
-          const downloadUrl = getDownloadUrl(photo);
           const viewUrl = getViewUrl(photo);
           return (
             '<article class="card ' + (isSel ? "selected" : "") + '" data-id="' + photo.id + '">' +
@@ -1032,7 +977,7 @@
               '<div class="card-body">' +
                 '<div class="card-name" title="' + (photo.name || "") + '">' + (photo.name || photo.id) + "</div>" +
                 '<div class="card-actions">' +
-                  '<a class="card-dl" href="' + downloadUrl + '" target="_blank" rel="noopener noreferrer">' + t("downloadOne") + "</a>" +
+                  '<button class="card-dl" type="button" data-dl-id="' + photo.id + '">' + t("downloadOne") + "</button>" +
                   '<a class="card-view" href="' + viewUrl + '" target="_blank" rel="noopener noreferrer">' + t("openDrive") + "</a>" +
                 "</div>" +
               "</div>" +
@@ -1128,261 +1073,3 @@
         }
         return best;
       }
-
-      function openPhoneDownloadSheet(list) {
-        const container = $("phoneDownloadList");
-        container.innerHTML = list.map((photo, idx) => {
-          const label = photo.name || ("photo-" + (idx + 1) + ".jpg");
-          const url = getDownloadUrl(photo);
-          return (
-            '<div class="phone-row">' +
-              '<span title="' + label + '">' + label + "</span>" +
-              '<a class="card-dl" style="min-height:36px; padding:0 12px;" href="' + url + '" target="_blank" rel="noopener noreferrer">' + t("openPhoto") + "</a>" +
-            "</div>"
-          );
-        }).join("");
-        $("phoneDownloadModal").classList.add("open");
-      }
-
-      async function downloadAsZip(list) {
-        const btn = $("floatingDownloadBtn");
-        btn.disabled = true;
-        try {
-          const JSZipLib = await ensureJsZipLoaded();
-          const zip = new JSZipLib();
-          let added = 0;
-
-          for (let i = 0; i < list.length; i++) {
-            const photo = list[i];
-            $("statusText").textContent = t("buildingZip", i + 1, list.length);
-            const candidates = [
-              "https://drive.google.com/uc?export=download&id=" + photo.id,
-              "https://drive.google.com/thumbnail?id=" + photo.id + "&sz=w1600"
-            ];
-            let fetchedBlob = null;
-            for (const u of candidates) {
-              try {
-                const resp = await fetch(u, { mode: "cors" });
-                if (resp.ok) {
-                  const blob = await resp.blob();
-                  if (blob && blob.size > 0 && blob.type.startsWith("image/")) {
-                    fetchedBlob = blob;
-                    break;
-                  }
-                }
-              } catch (_) {}
-            }
-
-            if (fetchedBlob) {
-              const ext = fetchedBlob.type.includes("png") ? "png" : "jpg";
-              const safeName = photo.name && /\.(jpe?g|png|webp)$/i.test(photo.name)
-                ? photo.name
-                : (photo.name ? photo.name + "." + ext : photo.id + "." + ext);
-              zip.file(safeName, fetchedBlob);
-              added++;
-            }
-          }
-
-          if (added === 0) {
-            openPhoneDownloadSheet(list);
-            return;
-          }
-
-          const zipBlob = await zip.generateAsync({ type: "blob" });
-          const zipUrl = URL.createObjectURL(zipBlob);
-          const a = document.createElement("a");
-          a.href = zipUrl;
-          a.download = isFiltered ? "my-wedding-photos.zip" : "selected-wedding-photos.zip";
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          setTimeout(() => URL.revokeObjectURL(zipUrl), 15000);
-          $("statusText").textContent = t("zipReady");
-        } catch (_) {
-          openPhoneDownloadSheet(list);
-        } finally {
-          btn.disabled = false;
-        }
-      }
-
-      function handleBatchAction(list) {
-        if (!list || !list.length) return;
-        if (isIOS) {
-          openPhoneDownloadSheet(list);
-        } else {
-          downloadAsZip(list);
-        }
-      }
-
-      function handleFileSelection(file) {
-        if (!file) return;
-        if (previewObjectUrl) URL.revokeObjectURL(previewObjectUrl);
-        selectedFile = file;
-        previewObjectUrl = URL.createObjectURL(file);
-        $("selfiePreview").src = previewObjectUrl;
-        $("selectedFileName").textContent = file.name || "selfie.jpg";
-        $("previewBox").classList.add("has-img");
-        $("modalStatus").textContent = "";
-        if (aiReady) {
-          $("runSearchBtn").disabled = false;
-        } else {
-          ensureAiReady().catch(() => {});
-        }
-      }
-
-      function openSearchModal() {
-        $("searchModal").classList.add("open");
-        if (!aiReady) ensureAiReady().catch(() => {});
-      }
-
-      function closeSearchModal() {
-        $("searchModal").classList.remove("open");
-      }
-
-      $("langToggleBtn").addEventListener("click", () => applyLanguage(lang === "ar" ? "en" : "ar"));
-
-      document.querySelectorAll(".size-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          document.querySelectorAll(".size-btn").forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-          document.body.classList.remove("size-small", "size-medium", "size-large");
-          document.body.classList.add("size-" + btn.dataset.size);
-        });
-      });
-
-      $("toggleMultiBtn").addEventListener("click", () => {
-        multiSelectMode = !multiSelectMode;
-        if (!multiSelectMode) {
-          selectedIds.clear();
-          syncSelectionVisualsOnly();
-        }
-        syncToolbarAndFloating();
-      });
-
-      $("photoGrid").addEventListener("click", (e) => {
-        if (!multiSelectMode) return;
-        if (e.target.closest("a")) return;
-        const checkBtn = e.target.closest("[data-select-id]");
-        const cardEl = e.target.closest(".card");
-        const id = checkBtn ? checkBtn.getAttribute("data-select-id") : (cardEl ? cardEl.getAttribute("data-id") : null);
-        if (!id) return;
-
-        if (selectedIds.has(id)) selectedIds.delete(id);
-        else selectedIds.add(id);
-
-        syncSelectionVisualsOnly();
-        syncToolbarAndFloating();
-      });
-
-      $("selectAllVisibleBtn").addEventListener("click", () => {
-        displayedPhotos.forEach((p) => selectedIds.add(p.id));
-        syncSelectionVisualsOnly();
-        syncToolbarAndFloating();
-      });
-
-      $("floatingDownloadBtn").addEventListener("click", () => {
-        if (multiSelectMode && selectedIds.size > 0) {
-          handleBatchAction(allPhotos.filter((p) => selectedIds.has(p.id)));
-        } else if (isFiltered && displayedPhotos.length > 0) {
-          handleBatchAction(displayedPhotos);
-        }
-      });
-
-      $("closePhoneModalBtn").addEventListener("click", () => $("phoneDownloadModal").classList.remove("open"));
-      $("donePhoneModalBtn").addEventListener("click", () => $("phoneDownloadModal").classList.remove("open"));
-      $("phoneDownloadModal").addEventListener("click", (e) => {
-        if (e.target === $("phoneDownloadModal")) $("phoneDownloadModal").classList.remove("open");
-      });
-
-      $("openSearchBtnDesktop").addEventListener("click", openSearchModal);
-      $("openSearchBtnMobile").addEventListener("click", openSearchModal);
-      $("closeModalBtn").addEventListener("click", closeSearchModal);
-      $("cancelModalBtn").addEventListener("click", closeSearchModal);
-      $("searchModal").addEventListener("click", (e) => {
-        if (e.target === $("searchModal")) closeSearchModal();
-      });
-
-      $("cameraInput").addEventListener("change", (e) => handleFileSelection(e.target.files[0]));
-      $("galleryInput").addEventListener("change", (e) => handleFileSelection(e.target.files[0]));
-
-      $("runSearchBtn").addEventListener("click", async () => {
-        if (!selectedFile) return;
-        $("runSearchBtn").disabled = true;
-
-        try {
-          await ensureAiReady();
-          $("modalStatus").textContent = t("scanning");
-
-          const img = await faceapi.bufferToImage(selectedFile);
-          const detection = await faceapi.detectSingleFace(img).withFaceLandmarks().withFaceDescriptor();
-
-          if (!detection) {
-            $("modalStatus").textContent = t("noFace");
-            $("runSearchBtn").disabled = false;
-            return;
-          }
-
-          const guestVector = Array.from(detection.descriptor);
-          const matched = allPhotos
-            .map((photo) => ({ ...photo, dist: bestDistanceForPhoto(guestVector, photo.faces) }))
-            .filter((item) => item.dist < THRESHOLD)
-            .sort((a, b) => a.dist - b.dist);
-
-          isFiltered = true;
-          displayedPhotos = matched;
-          selectedIds.clear();
-          multiSelectMode = false;
-          syncToolbarAndFloating();
-          $("statusText").textContent = matched.length > 0 ? t("readyFiltered", matched.length) : t("noMatches");
-          renderGrid(displayedPhotos);
-          closeSearchModal();
-        } catch (err) {
-          $("modalStatus").textContent = err.message || "Error scanning photo";
-        } finally {
-          if (selectedFile && aiReady) $("runSearchBtn").disabled = false;
-        }
-      });
-
-      $("resetFilterBtn").addEventListener("click", () => {
-        clearSelfieMemory();
-        isFiltered = false;
-        multiSelectMode = false;
-        displayedPhotos = [...allPhotos];
-        selectedIds.clear();
-        syncToolbarAndFloating();
-        $("statusText").textContent = t("readyAll", allPhotos.length);
-        renderGrid(displayedPhotos);
-      });
-
-      window.addEventListener("beforeunload", clearSelfieMemory);
-      window.addEventListener("pagehide", clearSelfieMemory);
-
-      async function init() {
-        applyLanguage("ar");
-        syncToolbarAndFloating();
-        $("statusText").textContent = t("loadingAlbum");
-
-        try {
-          const res = await fetch("faces.json");
-          const data = await res.json();
-          allPhotos = Array.isArray(data) ? data : (data.photos || []);
-          displayedPhotos = [...allPhotos];
-          renderGrid(displayedPhotos);
-          syncToolbarAndFloating();
-          $("statusText").textContent = t("readyAll", allPhotos.length);
-
-          if ("requestIdleCallback" in window) {
-            requestIdleCallback(() => ensureAiReady().catch(() => {}), { timeout: 2500 });
-          } else {
-            setTimeout(() => ensureAiReady().catch(() => {}), 800);
-          }
-        } catch (err) {
-          $("statusText").textContent = "Error: " + err.message;
-        }
-      }
-
-      init();
-    })();
-  </script>
-</body>
-</html>
