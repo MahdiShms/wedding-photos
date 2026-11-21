@@ -129,13 +129,13 @@
       border-color: var(--find-amber-hover);
     }
 
-    .btn-zip {
+    .btn-dl-all {
       background: var(--dl-blue);
       color: #ffffff;
       border-color: var(--dl-blue);
     }
 
-    .btn-zip:hover:not(:disabled) {
+    .btn-dl-all:hover:not(:disabled) {
       background: var(--dl-blue-hover);
       border-color: var(--dl-blue-hover);
     }
@@ -225,6 +225,7 @@
       height: var(--img-h);
       background: var(--surface-2);
       overflow: hidden;
+      cursor: pointer;
     }
 
     .card-media img {
@@ -276,7 +277,7 @@
 
     .card-dl:hover { background: var(--dl-blue-hover); }
 
-    .card-view {
+    .card-open {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -286,10 +287,12 @@
       background: var(--surface-2);
       color: var(--text);
       text-decoration: none;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-weight: 700;
       border: 1px solid var(--border);
     }
+
+    .card-open:hover { background: #e5dfd4; }
 
     .load-more-wrap { margin-top: 20px; text-align: center; }
 
@@ -486,8 +489,8 @@
 
   <div class="floating-download" id="floatingDownloadBar" aria-live="polite">
     <span class="floating-label" id="floatingLabelText"></span>
-    <button class="btn btn-zip action-pill" id="floatingDownloadBtn" type="button">
-      <span id="floatingDownloadBtnText">تحميل ZIP</span>
+    <button class="btn btn-dl-all action-pill" id="floatingDownloadBtn" type="button">
+      <span id="floatingDownloadBtnText">تحميل الكل</span>
     </button>
   </div>
 
@@ -540,10 +543,6 @@
         "https://unpkg.com/@vladmandic/face-api/model",
         "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model"
       ];
-      const JSZIP_URLS = [
-        "https://unpkg.com/jszip@3.10.1/dist/jszip.min.js",
-        "https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"
-      ];
       const THRESHOLD = 0.50;
       const PAGE_SIZE = 60;
 
@@ -552,7 +551,7 @@
           title: "معرض صور الزفاف",
           subtitle: "تصفح جميع الصور أو ابحث عن صورك بسهولة",
           findBtn: "ابحث عن صورك",
-          downloadZip: "تحميل ZIP",
+          downloadAll: "تحميل الكل",
           multiSelect: "تحديد متعدد",
           doneSelect: "إنهاء التحديد",
           selectAll: "تحديد الكل",
@@ -564,7 +563,7 @@
           sizeMedium: "متوسط",
           sizeLarge: "كبير",
           downloadOne: "تحميل",
-          openDrive: "Drive",
+          openPhoto: "فتح",
           loadingAlbum: "جاري تحميل الألبوم...",
           loadingAiOnDemand: "جاري تحميل محرك البحث بالوجه...",
           readyAll: (shown, total) => shown < total
@@ -587,15 +586,13 @@
           noFace: "لم يتم التعرف على وجه بوضوح. جرّب صورة أوضح بإضاءة جيدة.",
           floatingSelected: (n) => "تم تحديد " + n + " صورة",
           floatingMatchedAll: (n) => "صورك المطابقة (" + n + ")",
-          buildingZip: (done, total) => "جاري ضغط " + done + " من " + total + " صورة في ZIP...",
-          zipReady: (count) => "تم إنشاء ملف ZIP (" + count + " صور) وبدء التحميل",
-          zipCorsBlocked: "Google Drive يمنع سحب الصور مباشرة لعمل ZIP داخل المتصفح بدون خادم وسيط."
+          batchDownloading: (n) => "جاري بدء تحميل " + n + " صورة. إذا طلب المتصفح السماح بتنزيل عدة ملفات، اضغط «سماح» (Allow)."
         },
         en: {
           title: "Wedding Gallery",
           subtitle: "Browse all photos or find yours easily",
           findBtn: "Find My Photos",
-          downloadZip: "Download ZIP",
+          downloadAll: "Download All",
           multiSelect: "Multi-Select",
           doneSelect: "Done",
           selectAll: "Select All",
@@ -607,7 +604,7 @@
           sizeMedium: "Medium",
           sizeLarge: "Large",
           downloadOne: "Download",
-          openDrive: "Drive",
+          openPhoto: "Open",
           loadingAlbum: "Loading album...",
           loadingAiOnDemand: "Loading face-search engine...",
           readyAll: (shown, total) => shown < total
@@ -630,9 +627,7 @@
           noFace: "Couldn't clearly detect a face. Try a clearer photo in good lighting.",
           floatingSelected: (n) => n + " photo(s) selected",
           floatingMatchedAll: (n) => "Your matched photos (" + n + ")",
-          buildingZip: (done, total) => "Packing " + done + " of " + total + " photos into ZIP...",
-          zipReady: (count) => "ZIP created (" + count + " photos) and download started",
-          zipCorsBlocked: "Google Drive blocks direct browser ZIP assembly without a proxy/backend."
+          batchDownloading: (n) => "Starting download for " + n + " photos. If prompted for multiple downloads, click Allow."
         }
       };
 
@@ -646,7 +641,6 @@
       let albumErrorMsg = "";
       let aiReady = false;
       let aiLoadingPromise = null;
-      let jszipPromise = null;
       let selectedFile = null;
       let previewObjectUrl = null;
 
@@ -661,7 +655,7 @@
         return "https://drive.google.com/uc?export=download&id=" + photo.id;
       }
 
-      function getViewUrl(photo) {
+      function getOpenUrl(photo) {
         return "https://drive.google.com/file/d/" + photo.id + "/view";
       }
 
@@ -705,11 +699,11 @@
         if (multiSelectMode && selCount > 0) {
           floatBar.classList.add("visible");
           $("floatingLabelText").textContent = t("floatingSelected", selCount);
-          $("floatingDownloadBtnText").textContent = t("downloadZip");
+          $("floatingDownloadBtnText").textContent = t("downloadAll");
         } else if (isFiltered && hasPhotos) {
           floatBar.classList.add("visible");
           $("floatingLabelText").textContent = t("floatingMatchedAll", displayedPhotos.length);
-          $("floatingDownloadBtnText").textContent = t("downloadZip");
+          $("floatingDownloadBtnText").textContent = t("downloadAll");
         } else {
           floatBar.classList.remove("visible");
         }
@@ -724,6 +718,7 @@
         $("subtitleText").textContent = t("subtitle");
         $("findBtnTextDesktop").textContent = t("findBtn");
         $("findBtnTextMobile").textContent = t("findBtn");
+        $("floatingDownloadBtnText").textContent = t("downloadAll");
         $("selectAllText").textContent = t("selectAll");
         $("langToggleBtn").textContent = t("langBtn");
         $("showAllText").textContent = t("showAll");
@@ -782,10 +777,10 @@
           const isSel = selectedIds.has(photo.id);
           const previewUrl = "https://drive.google.com/thumbnail?id=" + photo.id + "&sz=w800";
           const downloadUrl = getDirectDownloadUrl(photo);
-          const viewUrl = getViewUrl(photo);
+          const openUrl = getOpenUrl(photo);
           return (
             '<article class="card ' + (isSel ? "selected" : "") + '" data-id="' + photo.id + '">' +
-              '<div class="card-media">' +
+              '<div class="card-media" data-open-id="' + photo.id + '">' +
                 '<img src="' + previewUrl + '" loading="lazy" decoding="async" alt="' + (photo.name || "Wedding photo") + '" />' +
                 '<button class="select-check" type="button" data-select-id="' + photo.id + '" aria-label="Select photo">' + (isSel ? "✓" : "") + "</button>" +
               "</div>" +
@@ -793,12 +788,29 @@
                 '<div class="card-name" title="' + (photo.name || "") + '">' + (photo.name || photo.id) + "</div>" +
                 '<div class="card-actions">' +
                   '<a class="card-dl" href="' + downloadUrl + '" download="' + (photo.name || (photo.id + ".jpg")) + '" target="_blank" rel="noopener noreferrer">' + t("downloadOne") + "</a>" +
-                  '<a class="card-view" href="' + viewUrl + '" target="_blank" rel="noopener noreferrer">' + t("openDrive") + "</a>" +
+                  '<a class="card-open" href="' + openUrl + '" target="_blank" rel="noopener noreferrer">' + t("openPhoto") + "</a>" +
                 "</div>" +
               "</div>" +
             "</article>"
           );
         }).join("");
+      }
+
+      function downloadAllWithoutZip(list) {
+        if (!list || !list.length) return;
+        $("statusText").textContent = t("batchDownloading", list.length);
+        list.forEach((photo, idx) => {
+          setTimeout(() => {
+            const a = document.createElement("a");
+            a.href = getDirectDownloadUrl(photo);
+            a.download = photo.name || (photo.id + ".jpg");
+            a.target = "_blank";
+            a.rel = "noopener noreferrer";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+          }, idx * 350);
+        });
       }
 
       function loadScript(src) {
@@ -810,25 +822,6 @@
           s.onerror = () => reject(new Error("Failed to load " + src));
           document.head.appendChild(s);
         });
-      }
-
-      async function ensureJsZipLoaded() {
-        if (window.JSZip) return window.JSZip;
-        if (!jszipPromise) {
-          jszipPromise = (async () => {
-            for (const url of JSZIP_URLS) {
-              try {
-                await loadScript(url);
-                if (window.JSZip) return window.JSZip;
-              } catch (_) {}
-            }
-            throw new Error("Could not load JSZip");
-          })().catch((err) => {
-            jszipPromise = null;
-            throw err;
-          });
-        }
-        return jszipPromise;
       }
 
       async function ensureFaceApiLoaded() {
@@ -889,73 +882,6 @@
         return best;
       }
 
-      async function fetchPhotoBlob(photo) {
-        const candidates = [
-          "https://drive.google.com/thumbnail?id=" + photo.id + "&sz=w2000",
-          "https://drive.google.com/thumbnail?id=" + photo.id + "&sz=w1600",
-          "https://drive.google.com/uc?export=download&id=" + photo.id
-        ];
-        for (const u of candidates) {
-          try {
-            const resp = await fetch(u, { mode: "cors", credentials: "omit" });
-            if (resp.ok) {
-              const blob = await resp.blob();
-              if (blob && blob.size > 0 && blob.type.startsWith("image/")) {
-                return blob;
-              }
-            }
-          } catch (_) {}
-        }
-        return null;
-      }
-
-      function formatFileName(photo, blob, index) {
-        const ext = blob && blob.type && blob.type.includes("png") ? "png" : "jpg";
-        if (photo.name && /\.(jpe?g|png|webp)$/i.test(photo.name)) {
-          return photo.name;
-        }
-        return (photo.name || ("photo-" + (index + 1))) + "." + ext;
-      }
-
-      async function downloadMultiAsZip(list, zipFileName, triggerBtn) {
-        if (!list || !list.length) return;
-        if (triggerBtn) triggerBtn.disabled = true;
-
-        try {
-          const JSZipLib = await ensureJsZipLoaded();
-          const zip = new JSZipLib();
-          let added = 0;
-
-          for (let i = 0; i < list.length; i++) {
-            const photo = list[i];
-            $("statusText").textContent = t("buildingZip", i + 1, list.length);
-            const blob = await fetchPhotoBlob(photo);
-            if (blob) {
-              zip.file(formatFileName(photo, blob, i), blob);
-              added++;
-            }
-          }
-
-          if (added === 0) {
-            $("statusText").textContent = t("zipCorsBlocked");
-            return;
-          }
-
-          const zipBlob = await zip.generateAsync({ type: "blob" });
-          const zipUrl = URL.createObjectURL(zipBlob);
-          const a = document.createElement("a");
-          a.href = zipUrl;
-          a.download = zipFileName;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          setTimeout(() => URL.revokeObjectURL(zipUrl), 15000);
-          $("statusText").textContent = t("zipReady", added);
-        } finally {
-          if (triggerBtn) triggerBtn.disabled = false;
-        }
-      }
-
       function handleFileSelection(file) {
         if (!file) return;
         if (previewObjectUrl) URL.revokeObjectURL(previewObjectUrl);
@@ -1009,18 +935,27 @@
       });
 
       $("photoGrid").addEventListener("click", (e) => {
-        if (!multiSelectMode) return;
         if (e.target.closest("a")) return;
+
         const checkBtn = e.target.closest("[data-select-id]");
         const cardEl = e.target.closest(".card");
         const id = checkBtn ? checkBtn.getAttribute("data-select-id") : (cardEl ? cardEl.getAttribute("data-id") : null);
         if (!id) return;
 
-        if (selectedIds.has(id)) selectedIds.delete(id);
-        else selectedIds.add(id);
+        if (multiSelectMode) {
+          if (selectedIds.has(id)) selectedIds.delete(id);
+          else selectedIds.add(id);
+          syncSelectionVisualsOnly();
+          syncToolbarAndFloating();
+          return;
+        }
 
-        syncSelectionVisualsOnly();
-        syncToolbarAndFloating();
+        if (e.target.closest("[data-open-id]")) {
+          const photo = allPhotos.find((p) => p.id === id);
+          if (photo) {
+            window.open(getOpenUrl(photo), "_blank", "noopener,noreferrer");
+          }
+        }
       });
 
       $("selectAllVisibleBtn").addEventListener("click", () => {
@@ -1031,10 +966,9 @@
 
       $("floatingDownloadBtn").addEventListener("click", () => {
         if (multiSelectMode && selectedIds.size > 0) {
-          const chosen = allPhotos.filter((p) => selectedIds.has(p.id));
-          downloadMultiAsZip(chosen, "selected-wedding-photos.zip", $("floatingDownloadBtn"));
+          downloadAllWithoutZip(allPhotos.filter((p) => selectedIds.has(p.id)));
         } else if (isFiltered && displayedPhotos.length > 0) {
-          downloadMultiAsZip(displayedPhotos, "my-wedding-photos.zip", $("floatingDownloadBtn"));
+          downloadAllWithoutZip(displayedPhotos);
         }
       });
 
