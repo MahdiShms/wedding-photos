@@ -13,7 +13,7 @@
       --surface: #ffffff;
       --surface-2: #efeae2;
       --text: #151312;
-      --muted: #4e4944;
+      --muted: #55504a;
       --accent: #151312;
       --accent-hover: #2d2926;
       --accent-text: #ffffff;
@@ -21,12 +21,11 @@
       --dl-blue-hover: #1e40af;
       --find-amber: #b45309;
       --find-amber-hover: #92400e;
-      --border: #dcd5ca;
-      --radius-lg: 20px;
+      --border: #dfd8cd;
+      --radius-lg: 22px;
       --radius-md: 16px;
       --radius-sm: 11px;
-      --shadow: 0 8px 24px rgba(21, 19, 18, 0.06);
-      --float-shadow: 0 14px 34px rgba(21, 19, 18, 0.22);
+      --shadow: 0 10px 28px rgba(21, 19, 18, 0.06);
       --card-min: 235px;
       --img-h: 245px;
     }
@@ -46,6 +45,11 @@
       overflow-x: hidden;
     }
 
+    body.modal-open {
+      overflow: hidden;
+      touch-action: none;
+    }
+
     html[lang="en"] body {
       font-family: "Plus Jakarta Sans", "Cairo", system-ui, -apple-system, sans-serif;
     }
@@ -53,9 +57,10 @@
     .app-shell {
       max-width: 1280px;
       margin: 0 auto;
-      padding: 14px 14px 136px;
+      padding: 14px 14px 64px;
     }
 
+    /* Sticky top bar: Language left, Title centered, Find My Photos right */
     header.topbar {
       direction: ltr;
       position: sticky;
@@ -67,6 +72,7 @@
       gap: 10px;
       background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border: 1.5px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 12px 14px;
@@ -75,14 +81,17 @@
 
     .header-left { width: 92px; flex-shrink: 0; }
     .header-center { direction: inherit; text-align: center; min-width: 0; }
+
     .header-center h1 {
       margin: 0;
-      font-size: clamp(1.1rem, 2.3vw, 1.55rem);
+      font-size: clamp(1.12rem, 2.3vw, 1.55rem);
       font-weight: 700;
+      letter-spacing: -0.01em;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
     .header-center p {
       margin: 2px 0 0;
       font-size: 0.9rem;
@@ -91,6 +100,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
     .header-right { width: 168px; flex-shrink: 0; display: flex; justify-content: flex-end; }
 
     .btn {
@@ -110,9 +120,11 @@
       cursor: pointer;
       text-decoration: none;
       white-space: nowrap;
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
     }
 
-    .btn:hover:not(:disabled) { background: var(--surface-2); border-color: #b9b0a3; }
+    .btn:active:not(:disabled) { transform: scale(0.98); }
+    .btn:hover:not(:disabled) { background: var(--surface-2); border-color: #bfb5a6; }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
     .btn-find {
@@ -129,19 +141,9 @@
       border-color: var(--find-amber-hover);
     }
 
-    .btn-dl-all {
-      background: var(--dl-blue);
-      color: #ffffff;
-      border-color: var(--dl-blue);
-    }
-
-    .btn-dl-all:hover:not(:disabled) {
-      background: var(--dl-blue-hover);
-      border-color: var(--dl-blue-hover);
-    }
-
     .lang-btn { width: 100%; padding: 0 10px; font-size: 0.9rem; }
 
+    /* Toolbar */
     .toolbar {
       display: flex;
       flex-wrap: wrap;
@@ -153,12 +155,13 @@
       background: var(--surface);
       border: 1.5px solid var(--border);
       border-radius: var(--radius-md);
+      box-shadow: 0 4px 16px rgba(21, 19, 18, 0.03);
     }
 
     .size-group {
       direction: ltr;
       display: inline-grid;
-      grid-template-columns: repeat(3, 76px);
+      grid-template-columns: repeat(3, 78px);
       background: var(--surface-2);
       padding: 4px;
       border-radius: 999px;
@@ -176,11 +179,19 @@
       min-height: 36px;
       border-radius: 999px;
       cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease;
     }
 
     .size-btn.active { background: var(--accent); color: var(--accent-text); }
 
-    .toolbar-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; min-width: 0; }
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-width: 0;
+    }
+
     .badge-pill {
       font-size: 0.9rem;
       font-weight: 700;
@@ -191,9 +202,22 @@
       white-space: nowrap;
     }
 
-    .action-pill { min-height: 38px; padding: 0 14px; font-size: 0.88rem; }
-    .status-line { margin-top: 10px; padding-inline: 6px; font-size: 0.94rem; font-weight: 600; color: var(--muted); min-height: 24px; }
+    .action-pill {
+      min-height: 38px;
+      padding: 0 14px;
+      font-size: 0.88rem;
+    }
 
+    .status-line {
+      margin-top: 10px;
+      padding-inline: 6px;
+      font-size: 0.94rem;
+      font-weight: 600;
+      color: var(--muted);
+      min-height: 24px;
+    }
+
+    /* Display sizes */
     body.size-small { --card-min: 170px; --img-h: 180px; }
     body.size-medium { --card-min: 235px; --img-h: 245px; }
     body.size-large { --card-min: 335px; --img-h: 340px; }
@@ -201,12 +225,11 @@
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(var(--card-min), 1fr));
-      gap: 14px;
+      gap: 16px;
       margin-top: 10px;
     }
 
     .card {
-      position: relative;
       background: var(--surface);
       border: 1.5px solid var(--border);
       border-radius: var(--radius-md);
@@ -215,12 +238,16 @@
       display: flex;
       flex-direction: column;
       min-width: 0;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
     }
 
-    .card.selected { border-color: var(--dl-blue); box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.28); }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(21, 19, 18, 0.09);
+      border-color: #cfc6b8;
+    }
 
     .card-media {
-      position: relative;
       width: 100%;
       height: var(--img-h);
       background: var(--surface-2);
@@ -228,6 +255,7 @@
       cursor: pointer;
     }
 
+    /* Upper-half framing so faces remain clearly visible */
     .card-media img {
       width: 100%;
       height: 100%;
@@ -236,30 +264,30 @@
       display: block;
     }
 
-    .select-check {
-      display: none;
-      position: absolute;
-      top: 10px;
-      inset-inline-end: 10px;
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
-      border: 2px solid #ffffff;
-      background: rgba(21, 19, 18, 0.72);
-      color: #ffffff;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 1rem;
-      font-weight: 700;
+    .card-body {
+      padding: 11px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      flex: 1;
+      justify-content: space-between;
+      min-width: 0;
     }
 
-    body.multiselect-active .select-check { display: inline-flex; }
-    .card.selected .select-check { background: var(--dl-blue); border-color: var(--dl-blue); }
+    .card-name {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-    .card-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; flex: 1; justify-content: space-between; min-width: 0; }
-    .card-name { font-size: 0.82rem; font-weight: 600; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .card-actions { display: flex; flex-direction: column; gap: 6px; }
+    .card-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
 
     .card-dl {
       display: inline-flex;
@@ -273,6 +301,7 @@
       text-decoration: none;
       font-size: 0.88rem;
       font-weight: 700;
+      transition: background-color 0.15s ease;
     }
 
     .card-dl:hover { background: var(--dl-blue-hover); }
@@ -290,11 +319,12 @@
       font-size: 0.82rem;
       font-weight: 700;
       border: 1px solid var(--border);
+      transition: background-color 0.15s ease;
     }
 
     .card-open:hover { background: #e5dfd4; }
 
-    .load-more-wrap { margin-top: 20px; text-align: center; }
+    .load-more-wrap { margin-top: 22px; text-align: center; }
 
     .empty-state {
       text-align: center;
@@ -307,34 +337,21 @@
       color: var(--muted);
     }
 
-    .floating-download {
-      display: none;
-      position: fixed;
-      bottom: 20px;
-      inset-inline-end: 20px;
-      z-index: 48;
-      align-items: center;
-      gap: 10px;
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: 999px;
-      padding: 8px 10px 8px 16px;
-      box-shadow: var(--float-shadow);
-    }
-
-    .floating-download.visible { display: inline-flex; }
-    .floating-label { font-size: 0.9rem; font-weight: 700; color: var(--text); white-space: nowrap; }
     .mobile-find-dock { display: none; }
 
+    /* Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(18, 16, 15, 0.62);
+      background: rgba(18, 16, 15, 0.64);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       display: none;
       align-items: center;
       justify-content: center;
       padding: 16px;
       z-index: 100;
+      overscroll-behavior: contain;
     }
 
     .modal-backdrop.open { display: flex; }
@@ -342,12 +359,15 @@
     .modal {
       width: 100%;
       max-width: 460px;
+      max-height: 90dvh;
+      overflow-y: auto;
       background: var(--surface);
       border: 1.5px solid var(--border);
       border-radius: 24px;
       padding: 22px;
       box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
       position: relative;
+      overscroll-behavior: contain;
     }
 
     .modal h2 { margin: 0 0 8px; font-size: 1.25rem; padding-inline-end: 40px; }
@@ -375,6 +395,7 @@
       text-align: center;
       cursor: pointer;
       background: var(--bg);
+      transition: border-color 0.15s ease, background-color 0.15s ease;
     }
     .choice-card:hover { border-color: var(--find-amber); background: var(--surface-2); }
     .choice-card strong { display: block; font-size: 1rem; margin-bottom: 4px; }
@@ -397,7 +418,7 @@
     input[type="file"] { display: none; }
 
     @media (max-width: 760px) {
-      .app-shell { padding-bottom: 156px; }
+      .app-shell { padding-bottom: 92px; }
       header.topbar { grid-template-columns: 84px 1fr 8px; gap: 8px; padding: 10px 12px; }
       .header-left { width: 84px; }
       .header-right { display: none; }
@@ -410,7 +431,7 @@
       body.size-small { --card-min: 112px; --img-h: 132px; }
       body.size-medium { --card-min: 165px; --img-h: 185px; }
       body.size-large { --card-min: 290px; --img-h: 295px; }
-      .grid { gap: 10px; }
+      .grid { gap: 12px; }
       .mobile-find-dock {
         position: fixed;
         bottom: 0;
@@ -421,16 +442,10 @@
         padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
         background: rgba(255, 255, 255, 0.96);
         backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
         border-top: 1.5px solid var(--border);
       }
       .mobile-find-dock .btn-find { height: 48px; font-size: 1rem; }
-      .floating-download {
-        bottom: calc(74px + env(safe-area-inset-bottom));
-        inset-inline: 12px;
-        justify-content: space-between;
-        border-radius: 18px;
-        padding: 10px 12px;
-      }
       .modal-backdrop.open { align-items: flex-end; padding: 0; }
       .modal { max-width: 100%; border-radius: 24px 24px 0 0; padding: 20px 16px calc(22px + env(safe-area-inset-bottom)); }
     }
@@ -465,14 +480,6 @@
       <div class="toolbar-actions">
         <span class="badge-pill" id="viewBadgeText">جميع الصور</span>
 
-        <button class="btn action-pill" id="toggleMultiBtn" type="button">
-          <span id="multiSelectText">تحديد متعدد</span>
-        </button>
-
-        <button class="btn action-pill" id="selectAllVisibleBtn" type="button" style="display:none;">
-          <span id="selectAllText">تحديد الكل</span>
-        </button>
-
         <button class="btn action-pill" id="resetFilterBtn" type="button" style="display:none;">
           <span id="showAllText">عرض الكل</span>
         </button>
@@ -485,13 +492,6 @@
       <button class="btn" id="loadMoreBtn" type="button"></button>
     </div>
     <div class="empty-state" id="emptyState" style="display:none;"></div>
-  </div>
-
-  <div class="floating-download" id="floatingDownloadBar" aria-live="polite">
-    <span class="floating-label" id="floatingLabelText"></span>
-    <button class="btn btn-dl-all action-pill" id="floatingDownloadBtn" type="button">
-      <span id="floatingDownloadBtnText">تحميل الكل</span>
-    </button>
   </div>
 
   <div class="mobile-find-dock">
@@ -551,10 +551,6 @@
           title: "معرض صور الزفاف",
           subtitle: "تصفح جميع الصور أو ابحث عن صورك بسهولة",
           findBtn: "ابحث عن صورك",
-          downloadAll: "تحميل الكل",
-          multiSelect: "تحديد متعدد",
-          doneSelect: "إنهاء التحديد",
-          selectAll: "تحديد الكل",
           langBtn: "English",
           viewAll: "جميع الصور",
           viewMatched: "صورك المطابقة",
@@ -583,19 +579,12 @@
           cancel: "إلغاء",
           search: "بحث",
           scanning: "جاري تحليل الوجه والبحث...",
-          noFace: "لم يتم التعرف على وجه بوضوح. جرّب صورة أوضح بإضاءة جيدة.",
-          floatingSelected: (n) => "تم تحديد " + n + " صورة",
-          floatingMatchedAll: (n) => "صورك المطابقة (" + n + ")",
-          batchDownloading: (n) => "جاري بدء تحميل " + n + " صورة. إذا طلب المتصفح السماح بتنزيل عدة ملفات، اضغط «سماح» (Allow)."
+          noFace: "لم يتم التعرف على وجه بوضوح. جرّب صورة أوضح بإضاءة جيدة."
         },
         en: {
           title: "Wedding Gallery",
           subtitle: "Browse all photos or find yours easily",
           findBtn: "Find My Photos",
-          downloadAll: "Download All",
-          multiSelect: "Multi-Select",
-          doneSelect: "Done",
-          selectAll: "Select All",
           langBtn: "العربية",
           viewAll: "All Photos",
           viewMatched: "Your Matched Photos",
@@ -624,10 +613,7 @@
           cancel: "Cancel",
           search: "Search",
           scanning: "Scanning face and searching...",
-          noFace: "Couldn't clearly detect a face. Try a clearer photo in good lighting.",
-          floatingSelected: (n) => n + " photo(s) selected",
-          floatingMatchedAll: (n) => "Your matched photos (" + n + ")",
-          batchDownloading: (n) => "Starting download for " + n + " photos. If prompted for multiple downloads, click Allow."
+          noFace: "Couldn't clearly detect a face. Try a clearer photo in good lighting."
         }
       };
 
@@ -635,8 +621,6 @@
       let allPhotos = [];
       let displayedPhotos = [];
       let visibleCount = PAGE_SIZE;
-      const selectedIds = new Set();
-      let multiSelectMode = false;
       let isFiltered = false;
       let albumErrorMsg = "";
       let aiReady = false;
@@ -674,39 +658,9 @@
         $("modalStatus").textContent = "";
       }
 
-      function syncSelectionVisualsOnly() {
-        document.querySelectorAll("#photoGrid .card").forEach((card) => {
-          const id = card.getAttribute("data-id");
-          const checked = selectedIds.has(id);
-          card.classList.toggle("selected", checked);
-          const box = card.querySelector(".select-check");
-          if (box) box.textContent = checked ? "✓" : "";
-        });
-      }
-
-      function syncToolbarAndFloating() {
-        const hasPhotos = displayedPhotos.length > 0;
-        const selCount = selectedIds.size;
-
-        document.body.classList.toggle("multiselect-active", multiSelectMode);
+      function syncToolbar() {
         $("viewBadgeText").textContent = isFiltered ? t("viewMatched") : t("viewAll");
         $("resetFilterBtn").style.display = isFiltered ? "inline-flex" : "none";
-        $("toggleMultiBtn").style.display = hasPhotos ? "inline-flex" : "none";
-        $("multiSelectText").textContent = multiSelectMode ? t("doneSelect") : t("multiSelect");
-        $("selectAllVisibleBtn").style.display = (multiSelectMode && hasPhotos) ? "inline-flex" : "none";
-
-        const floatBar = $("floatingDownloadBar");
-        if (multiSelectMode && selCount > 0) {
-          floatBar.classList.add("visible");
-          $("floatingLabelText").textContent = t("floatingSelected", selCount);
-          $("floatingDownloadBtnText").textContent = t("downloadAll");
-        } else if (isFiltered && hasPhotos) {
-          floatBar.classList.add("visible");
-          $("floatingLabelText").textContent = t("floatingMatchedAll", displayedPhotos.length);
-          $("floatingDownloadBtnText").textContent = t("downloadAll");
-        } else {
-          floatBar.classList.remove("visible");
-        }
       }
 
       function applyLanguage(newLang) {
@@ -718,8 +672,6 @@
         $("subtitleText").textContent = t("subtitle");
         $("findBtnTextDesktop").textContent = t("findBtn");
         $("findBtnTextMobile").textContent = t("findBtn");
-        $("floatingDownloadBtnText").textContent = t("downloadAll");
-        $("selectAllText").textContent = t("selectAll");
         $("langToggleBtn").textContent = t("langBtn");
         $("showAllText").textContent = t("showAll");
         $("sizeSmallBtn").textContent = t("sizeSmall");
@@ -735,7 +687,7 @@
         $("cancelModalBtn").textContent = t("cancel");
         $("runSearchBtn").textContent = t("search");
 
-        syncToolbarAndFloating();
+        syncToolbar();
 
         if (albumErrorMsg) {
           $("statusText").textContent = t("albumLoadError", albumErrorMsg);
@@ -774,15 +726,13 @@
         }
 
         grid.innerHTML = slice.map((photo) => {
-          const isSel = selectedIds.has(photo.id);
           const previewUrl = "https://drive.google.com/thumbnail?id=" + photo.id + "&sz=w800";
           const downloadUrl = getDirectDownloadUrl(photo);
           const openUrl = getOpenUrl(photo);
           return (
-            '<article class="card ' + (isSel ? "selected" : "") + '" data-id="' + photo.id + '">' +
+            '<article class="card" data-id="' + photo.id + '">' +
               '<div class="card-media" data-open-id="' + photo.id + '">' +
                 '<img src="' + previewUrl + '" loading="lazy" decoding="async" alt="' + (photo.name || "Wedding photo") + '" />' +
-                '<button class="select-check" type="button" data-select-id="' + photo.id + '" aria-label="Select photo">' + (isSel ? "✓" : "") + "</button>" +
               "</div>" +
               '<div class="card-body">' +
                 '<div class="card-name" title="' + (photo.name || "") + '">' + (photo.name || photo.id) + "</div>" +
@@ -794,23 +744,6 @@
             "</article>"
           );
         }).join("");
-      }
-
-      function downloadAllWithoutZip(list) {
-        if (!list || !list.length) return;
-        $("statusText").textContent = t("batchDownloading", list.length);
-        list.forEach((photo, idx) => {
-          setTimeout(() => {
-            const a = document.createElement("a");
-            a.href = getDirectDownloadUrl(photo);
-            a.download = photo.name || (photo.id + ".jpg");
-            a.target = "_blank";
-            a.rel = "noopener noreferrer";
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-          }, idx * 350);
-        });
       }
 
       function loadScript(src) {
@@ -900,11 +833,13 @@
 
       function openSearchModal() {
         $("searchModal").classList.add("open");
+        document.body.classList.add("modal-open");
         if (!aiReady) ensureAiReady().catch(() => {});
       }
 
       function closeSearchModal() {
         $("searchModal").classList.remove("open");
+        document.body.classList.remove("modal-open");
       }
 
       $("langToggleBtn").addEventListener("click", () => applyLanguage(lang === "ar" ? "en" : "ar"));
@@ -925,50 +860,13 @@
         $("statusText").textContent = t("readyAll", shown, allPhotos.length);
       });
 
-      $("toggleMultiBtn").addEventListener("click", () => {
-        multiSelectMode = !multiSelectMode;
-        if (!multiSelectMode) {
-          selectedIds.clear();
-          syncSelectionVisualsOnly();
-        }
-        syncToolbarAndFloating();
-      });
-
       $("photoGrid").addEventListener("click", (e) => {
-        if (e.target.closest("a")) return;
-
-        const checkBtn = e.target.closest("[data-select-id]");
-        const cardEl = e.target.closest(".card");
-        const id = checkBtn ? checkBtn.getAttribute("data-select-id") : (cardEl ? cardEl.getAttribute("data-id") : null);
-        if (!id) return;
-
-        if (multiSelectMode) {
-          if (selectedIds.has(id)) selectedIds.delete(id);
-          else selectedIds.add(id);
-          syncSelectionVisualsOnly();
-          syncToolbarAndFloating();
-          return;
-        }
-
-        if (e.target.closest("[data-open-id]")) {
-          const photo = allPhotos.find((p) => p.id === id);
-          if (photo) {
-            window.open(getOpenUrl(photo), "_blank", "noopener,noreferrer");
-          }
-        }
-      });
-
-      $("selectAllVisibleBtn").addEventListener("click", () => {
-        displayedPhotos.slice(0, visibleCount).forEach((p) => selectedIds.add(p.id));
-        syncSelectionVisualsOnly();
-        syncToolbarAndFloating();
-      });
-
-      $("floatingDownloadBtn").addEventListener("click", () => {
-        if (multiSelectMode && selectedIds.size > 0) {
-          downloadAllWithoutZip(allPhotos.filter((p) => selectedIds.has(p.id)));
-        } else if (isFiltered && displayedPhotos.length > 0) {
-          downloadAllWithoutZip(displayedPhotos);
+        const mediaEl = e.target.closest("[data-open-id]");
+        if (!mediaEl) return;
+        const id = mediaEl.getAttribute("data-open-id");
+        const photo = allPhotos.find((p) => p.id === id);
+        if (photo) {
+          window.open(getOpenUrl(photo), "_blank", "noopener,noreferrer");
         }
       });
 
@@ -1009,9 +907,7 @@
           isFiltered = true;
           displayedPhotos = matched;
           visibleCount = PAGE_SIZE;
-          selectedIds.clear();
-          multiSelectMode = false;
-          syncToolbarAndFloating();
+          syncToolbar();
           $("statusText").textContent = matched.length > 0 ? t("readyFiltered", matched.length) : t("noMatches");
           renderGrid(displayedPhotos);
           closeSearchModal();
@@ -1025,11 +921,9 @@
       $("resetFilterBtn").addEventListener("click", () => {
         clearSelfieMemory();
         isFiltered = false;
-        multiSelectMode = false;
         displayedPhotos = [...allPhotos];
         visibleCount = PAGE_SIZE;
-        selectedIds.clear();
-        syncToolbarAndFloating();
+        syncToolbar();
         const shown = Math.min(visibleCount, displayedPhotos.length);
         $("statusText").textContent = t("readyAll", shown, allPhotos.length);
         renderGrid(displayedPhotos);
@@ -1040,7 +934,7 @@
 
       async function init() {
         applyLanguage("ar");
-        syncToolbarAndFloating();
+        syncToolbar();
         $("statusText").textContent = t("loadingAlbum");
 
         try {
@@ -1054,7 +948,7 @@
           visibleCount = PAGE_SIZE;
           albumErrorMsg = "";
           renderGrid(displayedPhotos);
-          syncToolbarAndFloating();
+          syncToolbar();
           const shown = Math.min(visibleCount, displayedPhotos.length);
           $("statusText").textContent = t("readyAll", shown, allPhotos.length);
 
