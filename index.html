@@ -17,6 +17,10 @@
       --accent: #151312;
       --accent-hover: #2d2926;
       --accent-text: #ffffff;
+      --dl-blue: #1d4ed8;
+      --dl-blue-hover: #1e40af;
+      --find-amber: #b45309;
+      --find-amber-hover: #92400e;
       --border: #dcd5ca;
       --radius-lg: 20px;
       --radius-md: 16px;
@@ -58,7 +62,7 @@
       top: 10px;
       z-index: 40;
       display: grid;
-      grid-template-columns: 92px 1fr 164px;
+      grid-template-columns: 92px 1fr 168px;
       align-items: center;
       gap: 10px;
       background: rgba(255, 255, 255, 0.96);
@@ -87,7 +91,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .header-right { width: 164px; flex-shrink: 0; display: flex; justify-content: flex-end; }
+    .header-right { width: 168px; flex-shrink: 0; display: flex; justify-content: flex-end; }
 
     .btn {
       display: inline-flex;
@@ -109,11 +113,34 @@
     }
 
     .btn:hover:not(:disabled) { background: var(--surface-2); border-color: #b9b0a3; }
-    .btn-primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
-    .btn-primary:hover:not(:disabled) { background: var(--accent-hover); border-color: var(--accent-hover); }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-find {
+      background: var(--find-amber);
+      color: #ffffff;
+      border-color: var(--find-amber);
+      width: 100%;
+      padding: 0 14px;
+      font-size: 0.92rem;
+    }
+
+    .btn-find:hover:not(:disabled) {
+      background: var(--find-amber-hover);
+      border-color: var(--find-amber-hover);
+    }
+
+    .btn-zip {
+      background: var(--dl-blue);
+      color: #ffffff;
+      border-color: var(--dl-blue);
+    }
+
+    .btn-zip:hover:not(:disabled) {
+      background: var(--dl-blue-hover);
+      border-color: var(--dl-blue-hover);
+    }
+
     .lang-btn { width: 100%; padding: 0 10px; font-size: 0.9rem; }
-    .search-btn { width: 100%; padding: 0 14px; font-size: 0.92rem; }
 
     .toolbar {
       display: flex;
@@ -190,7 +217,7 @@
       min-width: 0;
     }
 
-    .card.selected { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent); }
+    .card.selected { border-color: var(--dl-blue); box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.28); }
 
     .card-media {
       position: relative;
@@ -227,7 +254,7 @@
     }
 
     body.multiselect-active .select-check { display: inline-flex; }
-    .card.selected .select-check { background: var(--accent); border-color: var(--accent); }
+    .card.selected .select-check { background: var(--dl-blue); border-color: var(--dl-blue); }
 
     .card-body { padding: 10px; display: flex; flex-direction: column; gap: 8px; flex: 1; justify-content: space-between; min-width: 0; }
     .card-name { font-size: 0.82rem; font-weight: 600; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -240,14 +267,14 @@
       min-height: 38px;
       padding: 0 10px;
       border-radius: var(--radius-sm);
-      background: var(--accent);
-      color: var(--accent-text);
+      background: var(--dl-blue);
+      color: #ffffff;
       text-decoration: none;
-      font-size: 0.86rem;
+      font-size: 0.88rem;
       font-weight: 700;
     }
 
-    .card-dl:hover { background: var(--accent-hover); }
+    .card-dl:hover { background: var(--dl-blue-hover); }
 
     .card-view {
       display: inline-flex;
@@ -311,9 +338,7 @@
 
     .modal {
       width: 100%;
-      max-width: 480px;
-      max-height: 86vh;
-      overflow-y: auto;
+      max-width: 460px;
       background: var(--surface);
       border: 1.5px solid var(--border);
       border-radius: 24px;
@@ -348,7 +373,7 @@
       cursor: pointer;
       background: var(--bg);
     }
-    .choice-card:hover { border-color: var(--accent); background: var(--surface-2); }
+    .choice-card:hover { border-color: var(--find-amber); background: var(--surface-2); }
     .choice-card strong { display: block; font-size: 1rem; margin-bottom: 4px; }
     .choice-card span { font-size: 0.84rem; color: var(--muted); }
 
@@ -366,33 +391,6 @@
 
     .modal-status { font-size: 0.92rem; font-weight: 600; color: var(--muted); margin-bottom: 14px; min-height: 22px; }
     .modal-footer { display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; }
-
-    .batch-items {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin: 12px 0 16px;
-    }
-
-    .batch-item-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-    }
-
-    .batch-item-row span {
-      font-size: 0.86rem;
-      font-weight: 600;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
     input[type="file"] { display: none; }
 
     @media (max-width: 760px) {
@@ -422,7 +420,7 @@
         backdrop-filter: blur(12px);
         border-top: 1.5px solid var(--border);
       }
-      .mobile-find-dock .search-btn { height: 48px; font-size: 1rem; }
+      .mobile-find-dock .btn-find { height: 48px; font-size: 1rem; }
       .floating-download {
         bottom: calc(74px + env(safe-area-inset-bottom));
         inset-inline: 12px;
@@ -448,7 +446,7 @@
       </div>
 
       <div class="header-right">
-        <button class="btn btn-primary search-btn" id="openSearchBtnDesktop" type="button">
+        <button class="btn btn-find" id="openSearchBtnDesktop" type="button">
           <span id="findBtnTextDesktop">ابحث عن صورك</span>
         </button>
       </div>
@@ -488,18 +486,17 @@
 
   <div class="floating-download" id="floatingDownloadBar" aria-live="polite">
     <span class="floating-label" id="floatingLabelText"></span>
-    <button class="btn btn-primary action-pill" id="floatingDownloadBtn" type="button">
-      <span id="floatingDownloadBtnText">تحميل الكل</span>
+    <button class="btn btn-zip action-pill" id="floatingDownloadBtn" type="button">
+      <span id="floatingDownloadBtnText">تحميل ZIP</span>
     </button>
   </div>
 
   <div class="mobile-find-dock">
-    <button class="btn btn-primary search-btn" id="openSearchBtnMobile" type="button">
+    <button class="btn btn-find" id="openSearchBtnMobile" type="button">
       <span id="findBtnTextMobile">ابحث عن صورك</span>
     </button>
   </div>
 
-  <!-- Selfie / Upload Modal -->
   <div class="modal-backdrop" id="searchModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal">
       <button class="modal-close" id="closeModalBtn" type="button" aria-label="Close">×</button>
@@ -528,19 +525,8 @@
 
       <div class="modal-footer">
         <button class="btn" id="cancelModalBtn" type="button">إلغاء</button>
-        <button class="btn btn-primary" id="runSearchBtn" type="button" disabled>بحث</button>
+        <button class="btn btn-find" id="runSearchBtn" type="button" disabled>بحث</button>
       </div>
-    </div>
-  </div>
-
-  <!-- Batch Download Modal -->
-  <div class="modal-backdrop" id="batchModal" role="dialog" aria-modal="true" aria-labelledby="batchModalTitle">
-    <div class="modal">
-      <button class="modal-close" id="closeBatchModalBtn" type="button" aria-label="Close">×</button>
-      <h2 id="batchModalTitle">تحميل الصور</h2>
-      <p id="batchModalDesc">اضغط «تحميل» بجانب كل صورة لتحميلها مباشرة من Google Drive.</p>
-      <div class="batch-items" id="batchItemsList"></div>
-      <button class="btn btn-primary" style="width:100%;" id="doneBatchModalBtn" type="button">تم</button>
     </div>
   </div>
 
@@ -554,6 +540,10 @@
         "https://unpkg.com/@vladmandic/face-api/model",
         "https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model"
       ];
+      const JSZIP_URLS = [
+        "https://unpkg.com/jszip@3.10.1/dist/jszip.min.js",
+        "https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"
+      ];
       const THRESHOLD = 0.50;
       const PAGE_SIZE = 60;
 
@@ -562,8 +552,7 @@
           title: "معرض صور الزفاف",
           subtitle: "تصفح جميع الصور أو ابحث عن صورك بسهولة",
           findBtn: "ابحث عن صورك",
-          downloadAll: "تحميل الكل",
-          downloadSelected: "تحميل المحدد",
+          downloadZip: "تحميل ZIP",
           multiSelect: "تحديد متعدد",
           doneSelect: "إنهاء التحديد",
           selectAll: "تحديد الكل",
@@ -598,16 +587,15 @@
           noFace: "لم يتم التعرف على وجه بوضوح. جرّب صورة أوضح بإضاءة جيدة.",
           floatingSelected: (n) => "تم تحديد " + n + " صورة",
           floatingMatchedAll: (n) => "صورك المطابقة (" + n + ")",
-          batchModalTitle: (n) => "قائمة التحميل (" + n + " صور)",
-          batchModalDesc: "اضغط «تحميل» بجانب كل صورة لتحميلها مباشرة.",
-          doneBtn: "تم"
+          buildingZip: (done, total) => "جاري ضغط " + done + " من " + total + " صورة في ZIP...",
+          zipReady: (count) => "تم إنشاء ملف ZIP (" + count + " صور) وبدء التحميل",
+          zipCorsBlocked: "Google Drive يمنع سحب الصور مباشرة لعمل ZIP داخل المتصفح بدون خادم وسيط."
         },
         en: {
           title: "Wedding Gallery",
           subtitle: "Browse all photos or find yours easily",
           findBtn: "Find My Photos",
-          downloadAll: "Download All",
-          downloadSelected: "Download Selected",
+          downloadZip: "Download ZIP",
           multiSelect: "Multi-Select",
           doneSelect: "Done",
           selectAll: "Select All",
@@ -642,9 +630,9 @@
           noFace: "Couldn't clearly detect a face. Try a clearer photo in good lighting.",
           floatingSelected: (n) => n + " photo(s) selected",
           floatingMatchedAll: (n) => "Your matched photos (" + n + ")",
-          batchModalTitle: (n) => "Download List (" + n + " photos)",
-          batchModalDesc: "Tap Download next to each photo to download it directly.",
-          doneBtn: "Done"
+          buildingZip: (done, total) => "Packing " + done + " of " + total + " photos into ZIP...",
+          zipReady: (count) => "ZIP created (" + count + " photos) and download started",
+          zipCorsBlocked: "Google Drive blocks direct browser ZIP assembly without a proxy/backend."
         }
       };
 
@@ -658,6 +646,7 @@
       let albumErrorMsg = "";
       let aiReady = false;
       let aiLoadingPromise = null;
+      let jszipPromise = null;
       let selectedFile = null;
       let previewObjectUrl = null;
 
@@ -716,11 +705,11 @@
         if (multiSelectMode && selCount > 0) {
           floatBar.classList.add("visible");
           $("floatingLabelText").textContent = t("floatingSelected", selCount);
-          $("floatingDownloadBtnText").textContent = t("downloadSelected");
+          $("floatingDownloadBtnText").textContent = t("downloadZip");
         } else if (isFiltered && hasPhotos) {
           floatBar.classList.add("visible");
           $("floatingLabelText").textContent = t("floatingMatchedAll", displayedPhotos.length);
-          $("floatingDownloadBtnText").textContent = t("downloadAll");
+          $("floatingDownloadBtnText").textContent = t("downloadZip");
         } else {
           floatBar.classList.remove("visible");
         }
@@ -750,9 +739,6 @@
         $("uploadChoiceSub").textContent = t("uploadSub");
         $("cancelModalBtn").textContent = t("cancel");
         $("runSearchBtn").textContent = t("search");
-
-        $("batchModalDesc").textContent = t("batchModalDesc");
-        $("doneBatchModalBtn").textContent = t("doneBtn");
 
         syncToolbarAndFloating();
 
@@ -815,22 +801,6 @@
         }).join("");
       }
 
-      function openBatchModal(list) {
-        if (!list || !list.length) return;
-        $("batchModalTitle").textContent = t("batchModalTitle", list.length);
-        $("batchItemsList").innerHTML = list.map((photo, idx) => {
-          const name = photo.name || ("photo-" + (idx + 1) + ".jpg");
-          const url = getDirectDownloadUrl(photo);
-          return (
-            '<div class="batch-item-row">' +
-              '<span title="' + name + '">' + name + "</span>" +
-              '<a class="card-dl" style="min-height:36px; padding:0 14px;" href="' + url + '" download="' + name + '" target="_blank" rel="noopener noreferrer">' + t("downloadOne") + "</a>" +
-            "</div>"
-          );
-        }).join("");
-        $("batchModal").classList.add("open");
-      }
-
       function loadScript(src) {
         return new Promise((resolve, reject) => {
           const s = document.createElement("script");
@@ -840,6 +810,25 @@
           s.onerror = () => reject(new Error("Failed to load " + src));
           document.head.appendChild(s);
         });
+      }
+
+      async function ensureJsZipLoaded() {
+        if (window.JSZip) return window.JSZip;
+        if (!jszipPromise) {
+          jszipPromise = (async () => {
+            for (const url of JSZIP_URLS) {
+              try {
+                await loadScript(url);
+                if (window.JSZip) return window.JSZip;
+              } catch (_) {}
+            }
+            throw new Error("Could not load JSZip");
+          })().catch((err) => {
+            jszipPromise = null;
+            throw err;
+          });
+        }
+        return jszipPromise;
       }
 
       async function ensureFaceApiLoaded() {
@@ -898,6 +887,73 @@
           if (d < best) best = d;
         }
         return best;
+      }
+
+      async function fetchPhotoBlob(photo) {
+        const candidates = [
+          "https://drive.google.com/thumbnail?id=" + photo.id + "&sz=w2000",
+          "https://drive.google.com/thumbnail?id=" + photo.id + "&sz=w1600",
+          "https://drive.google.com/uc?export=download&id=" + photo.id
+        ];
+        for (const u of candidates) {
+          try {
+            const resp = await fetch(u, { mode: "cors", credentials: "omit" });
+            if (resp.ok) {
+              const blob = await resp.blob();
+              if (blob && blob.size > 0 && blob.type.startsWith("image/")) {
+                return blob;
+              }
+            }
+          } catch (_) {}
+        }
+        return null;
+      }
+
+      function formatFileName(photo, blob, index) {
+        const ext = blob && blob.type && blob.type.includes("png") ? "png" : "jpg";
+        if (photo.name && /\.(jpe?g|png|webp)$/i.test(photo.name)) {
+          return photo.name;
+        }
+        return (photo.name || ("photo-" + (index + 1))) + "." + ext;
+      }
+
+      async function downloadMultiAsZip(list, zipFileName, triggerBtn) {
+        if (!list || !list.length) return;
+        if (triggerBtn) triggerBtn.disabled = true;
+
+        try {
+          const JSZipLib = await ensureJsZipLoaded();
+          const zip = new JSZipLib();
+          let added = 0;
+
+          for (let i = 0; i < list.length; i++) {
+            const photo = list[i];
+            $("statusText").textContent = t("buildingZip", i + 1, list.length);
+            const blob = await fetchPhotoBlob(photo);
+            if (blob) {
+              zip.file(formatFileName(photo, blob, i), blob);
+              added++;
+            }
+          }
+
+          if (added === 0) {
+            $("statusText").textContent = t("zipCorsBlocked");
+            return;
+          }
+
+          const zipBlob = await zip.generateAsync({ type: "blob" });
+          const zipUrl = URL.createObjectURL(zipBlob);
+          const a = document.createElement("a");
+          a.href = zipUrl;
+          a.download = zipFileName;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          setTimeout(() => URL.revokeObjectURL(zipUrl), 15000);
+          $("statusText").textContent = t("zipReady", added);
+        } finally {
+          if (triggerBtn) triggerBtn.disabled = false;
+        }
       }
 
       function handleFileSelection(file) {
@@ -975,16 +1031,11 @@
 
       $("floatingDownloadBtn").addEventListener("click", () => {
         if (multiSelectMode && selectedIds.size > 0) {
-          openBatchModal(allPhotos.filter((p) => selectedIds.has(p.id)));
+          const chosen = allPhotos.filter((p) => selectedIds.has(p.id));
+          downloadMultiAsZip(chosen, "selected-wedding-photos.zip", $("floatingDownloadBtn"));
         } else if (isFiltered && displayedPhotos.length > 0) {
-          openBatchModal(displayedPhotos);
+          downloadMultiAsZip(displayedPhotos, "my-wedding-photos.zip", $("floatingDownloadBtn"));
         }
-      });
-
-      $("closeBatchModalBtn").addEventListener("click", () => $("batchModal").classList.remove("open"));
-      $("doneBatchModalBtn").addEventListener("click", () => $("batchModal").classList.remove("open"));
-      $("batchModal").addEventListener("click", (e) => {
-        if (e.target === $("batchModal")) $("batchModal").classList.remove("open");
       });
 
       $("openSearchBtnDesktop").addEventListener("click", openSearchModal);
